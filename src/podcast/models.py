@@ -35,7 +35,7 @@ class Podcast(BaseModel):
     itunes_type = models.CharField(max_length=50)
     category = models.ManyToManyField(Category)
     podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.SET_NULL)
-    image = models.ForeignKey(Image,on_delete=models.SET_NULL)
+    image = models.OneToOneField(Image,on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.title
