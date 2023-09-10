@@ -1,8 +1,9 @@
 from django.db import models
 
+from main.models import BaseModel
 
 
-class Category(models.Model):
+class Category(BaseModel):
     name = models.CharField(max_length=50)
 
     def __str__(self):
