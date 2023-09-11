@@ -20,10 +20,10 @@ class Owner(BaseModel):
 
 
 class Image(BaseModel):
-    link = models.URLField()
-    title = models.CharField(max_length=100)
     url = models.URLField()
 
+    title = models.CharField(max_length=100,null=True,blank=True)
+    link = models.URLField(null=True,blank=True)
 
 class Podcast(BaseModel):
     title = models.CharField(max_length=100)
