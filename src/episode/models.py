@@ -16,6 +16,10 @@ class Episode(BaseModel):
     link = models.URLField(null=True,blank=True)
     pubDate = models.DateTimeField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
+    enclosure = models.CharField(null=True, blank=True)
+
+    #We use itunes_player for fireside_playerEmbedCode and handel this in view
+    itunes_player = models.CharField(null=True, blank=True)
 
     podcast = models.ForeignKey(Podcast,on_delete=models.CASCADE)
     author = models.ForeignKey(Author,on_delete=models.CASCADE)
