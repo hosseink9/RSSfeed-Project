@@ -25,6 +25,14 @@ class Image(BaseModel):
     title = models.CharField(max_length=100,null=True,blank=True)
     link = models.URLField(null=True,blank=True)
 
+class Generator(BaseModel):
+    name = models.CharField(max_length=100)
+
+    hostname = models.CharField(max_length=150,null=True,blank=True)
+    genDate = models.DateTimeField(null=True,blank=True)
+
+    def __str__(self):
+        return self.name
 class Podcast(BaseModel):
     title = models.CharField(max_length=100)
     description = models.TextField(null=True,blank=True)
