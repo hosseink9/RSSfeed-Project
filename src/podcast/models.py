@@ -25,6 +25,7 @@ class Image(BaseModel):
     title = models.CharField(max_length=100,null=True,blank=True)
     link = models.URLField(null=True,blank=True)
 
+
 class Generator(BaseModel):
     name = models.CharField(max_length=100)
 
@@ -33,14 +34,21 @@ class Generator(BaseModel):
 
     def __str__(self):
         return self.name
+
+
 class Podcast(BaseModel):
     title = models.CharField(max_length=100)
-    description = models.TextField(null=True,blank=True)
-    pubDate = models.DateTimeField()
-    link = models.URLField(null=True,blank=True)
     language = models.CharField(max_length=50)
-    itunes_subtitle = models.TextField(null=True,blank=True)
     itunes_type = models.CharField(max_length=50)
+    copy_right = models.CharField(max_length=100)
+
+    description = models.TextField(null=True,blank=True) #We use description for itunes summary and handel this in view
+    pubDate = models.DateTimeField(null=True,blank=True)
+    last_build_date = models.DateTimeField(null=True,blank=True)
+    link = models.URLField(null=True,blank=True)
+    itunes_subtitle = models.TextField(null=True,blank=True)
+    itunes_keywords = models.TextField(null=True, blank=True)
+
     category = models.ManyToManyField(Category)
     podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.SET_NULL)
     image = models.OneToOneField(Image,on_delete=models.SET_NULL)
