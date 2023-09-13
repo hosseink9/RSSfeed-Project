@@ -42,19 +42,16 @@ class Podcast(BaseModel):
     itunes_type = models.CharField(max_length=50)
     copy_right = models.CharField(max_length=100)
     explicit = models.CharField(max_length=50)
-    #We use description for itunes summary and handel this in view
-    description = models.TextField()
-
+    description = models.TextField() #We use description for itunes summary too.
     pubDate = models.DateTimeField(null=True,blank=True)
     last_build_date = models.DateTimeField(null=True,blank=True)
     link = models.URLField(null=True,blank=True)
     itunes_subtitle = models.TextField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
-
     category = models.ManyToManyField(Category)
     generator = models.ForeignKey(Generator,on_delete=models.CASCADE)
-    podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.SET_NULL)
+    author = models.ForeignKey(PodcastAuthor,on_delete=models.SET_NULL)
     image = models.OneToOneField(Image,on_delete=models.SET_NULL)
 
     def __str__(self):
-        return self.title
+        return f"{self.id}: {self.title}"
