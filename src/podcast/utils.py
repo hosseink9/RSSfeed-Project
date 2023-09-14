@@ -66,3 +66,21 @@ class Parser:
                 if old_episode:
                     return True
         return False
+
+    def get_episode_data(self):
+        podcast_obj = self.get_podcast_data()
+        item_list = self.item_tag_pattern.findall(self.rss_file)
+        episode_list = []
+
+        for item in item_list:
+            episode1 = EpisodeModel(podcast=podcast_obj)
+            match_list = self.tag_pattern.finditer(item[0])
+            episode_tags_name = list(set([item.group(1).replace('/', "") for item in match_list]))
+
+            for i in episode_tags_name:
+                pattern = f'(?:<{i}.*?>)(.*?)(?:<\/{i}>)'
+                values_item = re.findall(pattern,str(item))
+                episode1.__setattr__(i.replace(":","_"),values_item[0]) if len(values_item) == 1 else episode1.__setattr__(i.replace(":","_"),values_item)
+            episode_list.append(episode1)
+
+        return episode_list
