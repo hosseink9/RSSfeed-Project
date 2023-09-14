@@ -54,3 +54,15 @@ class Parser:
             podcast.__setattr__(tag.replace(":","_"),values_item[0]) if len(values_item) == 1 else podcast.__setattr__(tag.replace(":","_"),values_item)
         podcast.itunes_category = category_value[0][1]
         return podcast
+
+    def check_exist(self):
+        py_model = self.get_podcast_data()
+        episode_model = self.get_episode_data()
+        old_author = PodcastAuthor.objects.filter(name=py_model.itunes_author)
+        if old_author:
+            old_podcast = Podcast.objects.filter(title=py_model.title, link=py_model.link, author=old_author.first())
+            if old_podcast:
+                old_episode = Episode.objects.filter(guid = episode_model[0].guid)
+                if old_episode:
+                    return True
+        return False
