@@ -46,13 +46,20 @@ class Parser:
             pattern = f"(?:<{tag}.*?>)(.*?)(?:<\/{tag}>)"
             close_pattern = f"(?:<itunes:category+)(.*?)(?:/>)"
             category_set = re.findall(close_pattern, str(rss_excluded_episodes))
+
+            close_pattern_image = f"(?:<itunes:image+)(.*?)(?:/>)"
+            image_set = re.findall(close_pattern_image, str(rss_excluded_episodes))
+
             key_value_pattern = '([^ ]*?)=\"(.*?)\"'
             category_value = re.findall(key_value_pattern, str(category_set))
+
+            image_value = re.findall(key_value_pattern, str(image_set))
 
             values_item = re.findall(pattern,str(rss_excluded_episodes))
             values_item = list(set(values_item))
             podcast.__setattr__(tag.replace(":","_"),values_item[0]) if len(values_item) == 1 else podcast.__setattr__(tag.replace(":","_"),values_item)
         podcast.itunes_category = category_value[0][1]
+        podcast.itunes_image = image_value[0][1]
         return podcast
 
     def check_exist(self):
@@ -60,7 +67,7 @@ class Parser:
         episode_model = self.get_episode_data()
         old_author = PodcastAuthor.objects.filter(name=py_model.itunes_author)
         if old_author:
-            old_podcast = Podcast.objects.filter(title=py_model.title, link=py_model.link, author=old_author.first())
+            old_podcast = Podcast.objects.filter(title=py_model.title, link=py_model.link, podcast_author=old_author.first())
             if old_podcast:
                 old_episode = Episode.objects.filter(guid = episode_model[0].guid)
                 if old_episode:
@@ -92,7 +99,7 @@ class Parser:
         author = PodcastAuthor.objects.create(name=pod.itunes_author)
         category = Category.objects.create(name=pod.itunes_category)
         generator = Generator.objects.create(name=pod.generator)
-        image = Image.objects.create(url=pod.url)
+        image = Image.objects.create(url= pod.url if hasattr(pod, "url") else None )
         owner = Owner.objects.create(name=pod.itunes_name, email=pod.itunes_email)
 
         podcast_object = Podcast.objects.create(
@@ -107,6 +114,7 @@ class Parser:
             link = pod.link,
             itunes_subtitle = pod.itunes_subtitle if hasattr(pod, "itunes_subtitle") else None ,
             itunes_keywords = pod.itunes_keywords if hasattr(pod, "itunes_keywords") else None,
+            itunes_image = pod.itunes_image,
             # category = category,
             podcast_generator = generator,
             podcast_author = author,
@@ -152,3 +160,6 @@ class Parser:
             res_list.append(episode_field)
             # self.episodes_obj.append(e)
         Episode.objects.bulk_create(res_list)
+
+    def update_exist_podcast(self):
+        ...
