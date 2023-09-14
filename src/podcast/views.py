@@ -12,3 +12,10 @@ class PodcastListView(APIView):
         ser_data = PodcastSerializer(instance=query, many=True)
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
+
+class AddPodcastView(APIView):
+    def post(self, request):
+        file = request.FILES["xml"]
+        file = file.read()
+        Parser(rss_file=file.decode("utf-8"), save=True)
+        return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
