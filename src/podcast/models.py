@@ -20,7 +20,7 @@ class Owner(BaseModel):
 
 
 class Image(BaseModel):
-    url = models.URLField()
+    url = models.CharField(max_length=150,null=True,blank=True)
 
     title = models.CharField(max_length=100,null=True,blank=True)
     link = models.URLField(null=True,blank=True)
@@ -48,6 +48,7 @@ class Podcast(BaseModel):
     link = models.URLField(null=True,blank=True)
     itunes_subtitle = models.TextField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
+    itunes_image = models.CharField(max_length=400)
     category = models.ManyToManyField(Category)
     podcast_generator = models.ForeignKey(Generator,on_delete=models.CASCADE)
     podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.CASCADE)
