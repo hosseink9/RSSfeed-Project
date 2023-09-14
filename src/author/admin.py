@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import PodcastAuthor, EpisodeAuthor
 
-# Register your models here.
+admin.site.register(PodcastAuthor)
+admin.site.register(EpisodeAuthor)
