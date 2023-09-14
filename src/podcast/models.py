@@ -49,9 +49,9 @@ class Podcast(BaseModel):
     itunes_subtitle = models.TextField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
     category = models.ManyToManyField(Category)
-    generator = models.ForeignKey(Generator,on_delete=models.CASCADE)
-    author = models.ForeignKey(PodcastAuthor,on_delete=models.SET_NULL)
-    image = models.OneToOneField(Image,on_delete=models.SET_NULL)
+    podcast_generator = models.ForeignKey(Generator,on_delete=models.CASCADE)
+    podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.CASCADE)
+    podcast_image = models.OneToOneField(Image,on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.id}: {self.title}"
