@@ -84,3 +84,35 @@ class Parser:
             episode_list.append(episode1)
 
         return episode_list
+
+    def save_podcast_in_db(self):
+        #--save podcast--#
+        assert self.check_exist() == False, "Podcast already exist."
+        pod = self.get_podcast_data()
+        author = PodcastAuthor.objects.create(name=pod.itunes_author)
+        category = Category.objects.create(name=pod.itunes_category)
+        generator = Generator.objects.create(name=pod.generator)
+        image = Image.objects.create(url=pod.url)
+        owner = Owner.objects.create(name=pod.itunes_name, email=pod.itunes_email)
+
+        podcast_object = Podcast.objects.create(
+            title = pod.title,
+            language = pod.language,
+            itunes_type = pod.itunes_type,
+            copy_right = pod.copyright,
+            explicit = pod.itunes_explicit,
+            description = pod.description,
+            pubDate = dt.datetime.strptime(pod.pubDate, "%a, %d %b %Y %H:%M:%S %z") if hasattr(pod,'pubDate') else None, #“Mon, 4 Sep 2023 07:00:00 +0000”
+            last_build_date = dt.datetime.strptime(pod.lastBuildDate, "%a, %d %b %Y %H:%M:%S %z") if hasattr(pod,'last_build_date') else None,
+            link = pod.link,
+            itunes_subtitle = pod.itunes_subtitle if hasattr(pod, "itunes_subtitle") else None ,
+            itunes_keywords = pod.itunes_keywords if hasattr(pod, "itunes_keywords") else None,
+            # category = category,
+            podcast_generator = generator,
+            podcast_author = author,
+            podcast_image = image
+        )
+        podcast_object.category.add(category)
+        podcast_object.save()
+        self.podcast_obj = podcast_object
+        return podcast_object
