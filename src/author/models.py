@@ -10,7 +10,7 @@ class PodcastAuthor(BaseModel):
         return self.name
 
 
-class EpisodeAuthor(BaseModel):
+class EpisodeAuthor(models.Model):
     name = models.CharField(max_length=30, null=True, blank=True)
 
 
