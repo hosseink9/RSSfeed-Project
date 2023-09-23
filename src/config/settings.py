@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'main',
     'episode',
     'users',
+    'feedback',
     'corsheaders',
 ]
 
