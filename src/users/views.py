@@ -27,26 +27,16 @@ class SendOTPView(APIView):
             return Response (data={'message':"200"})
 
 
+class VerifyOTP(APIView):
 
     def post(self, request):
-        phone = request.data['phone']
-        password = request.data['password']
+        serliazer=LoginOTPSerializer(data=request.data, context={'request':request})
+        if serliazer.is_valid(raise_exception=True):
+            user=User.objects.get(phone=request.session.get('phone'))
+            access_token=user.get_access_token()
+            refresh_token=user.get_refresh_token()
+            return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
 
-        user = User.objects.filter(phone=phone).first()
-
-        if user is None:
-            raise AuthenticationFailed('User is not found')
-
-        if not user.check_password(password):
-            raise AuthenticationFailed('Password is not correct')
-
-        payload = {
-            'id': user.id,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            'iat': datetime.datetime.utcnow()
-        }
-
-        token = jwt.encode(payload, 'secret',algorithm='HS256')
 
         response = Response()
 
