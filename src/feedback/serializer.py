@@ -9,3 +9,9 @@ class LikeSerializer(serializers.Serializer):
     model = serializers.CharField(max_length = 50)
     model_id = serializers.IntegerField()
 
+
+class CommentSerializer(serializers.Serializer):
+    model = serializers.CharField(max_length = 50)
+    model_id = serializers.IntegerField()
+    text = serializers.CharField()
+
