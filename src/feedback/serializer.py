@@ -15,3 +15,10 @@ class CommentSerializer(serializers.Serializer):
     model_id = serializers.IntegerField()
     text = serializers.CharField()
 
+
+class PlaylistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Playlist
+        fields = ['title','description','account','podcasts','episodes']
+
+
