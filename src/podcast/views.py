@@ -1,11 +1,18 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
+from users.auth import JwtAuthentication
 from .models import Podcast
+from users.models import User
+from episode.models import Episode
 from .serializer import PodcastSerializer
 from .utils import Parser
+from feedback.serializer import LikeSerializer, CommentSerializer, PlaylistSerializer
+from feedback.models import Like, Comment, Playlist
 
-# Create your views here.
+
 class PodcastListView(APIView):
     def get(self, request):
         query = Podcast.objects.all()
@@ -19,6 +26,8 @@ class AddPodcastView(APIView):
         file = file.read()
         Parser(rss_file=file.decode("utf-8"), save=True)
         return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
+
+
 class LikeView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
@@ -58,5 +67,21 @@ class CommentView(APIView):
             if episode:
                 comment = Comment(content_object = episode, account = request.user, text = comment_serializer.validated_data.get("text"))
                 comment.save()
+        return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
+
+
+class PlaylistView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def post(self, request):
+        # print(request.user)
+        print(request.data)
+        DATA =  request.data.copy()
+        DATA['account'] = request.user
+        DATA.pop("playlist")
+        playlist_serializer = PlaylistSerializer(data = DATA, partial = True ,instance=Playlist.objects.get(id=request.data.get("playlist")))
+        playlist_serializer.is_valid(raise_exception=True)
+        playlist_serializer.save()
         return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
 
