@@ -19,7 +19,14 @@ class RegisterView(APIView):
         return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
 
-class LoginView(APIView):
+class SendOTPView(APIView):
+    def post(self, request):
+        serializer=SerializerLogin(data=request.data, context={'request':request})
+        if serializer.is_valid(raise_exception=True):
+            serializer.create_otp(request, serializer.data['phone'])
+            return Response (data={'message':"200"})
+
+
 
     def post(self, request):
         phone = request.data['phone']
