@@ -1,5 +1,6 @@
 from rest_framework.views import Response, APIView
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.models import update_last_login
 from rest_framework.views import Response
@@ -8,7 +9,9 @@ from django.contrib.auth import authenticate
 import jwt,datetime
 
 from .models import User
-from .serializers import UserSerializer
+from .serializers import UserSerializer, SerializerLogin, LoginOTPSerializer
+from .auth import JwtAuthentication
+
 
 
 class RegisterView(APIView):
@@ -47,12 +50,10 @@ class LoginRequiredView(APIView):
         return Response({'message':"success","phone":request.user.phone})
 
 
+class LogoutAPIView(APIView):
+
+    def post(self, request):
         response = Response()
-
-        response.set_cookie(key='jwt', value=token, httponly=True)
-        response.data = {
-            'jwt':token
-            }
-
-        update_last_login(None, user)
+        response.delete_cookie(key="AT")
+        response.data = {"message": "success"}
         return response
