@@ -1,3 +1,5 @@
+from django.db import models
+
 import re
 
 from django.db import models
@@ -5,6 +7,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from django.core.exceptions import ValidationError
 
 from main.models import BaseModel
+from .utils import JwtHelper
+from config import settings
 
 PHONE_REGEX_PATTERN = r"(((\+|00)(98))|0)?(?P<operator>9\d{2})-?(?P<middle3>\d{3})-?(?P<last4>\d{4})"
 
@@ -68,6 +72,12 @@ class User(AbstractBaseUser,PermissionsMixin, BaseModel):
 
     USERNAME_FIELD = 'phone'
     REQUIRED_FIELDS = []
+
+    def get_access_token(self):
+        return JwtHelper.generate_jwt_token(self.id,settings.SECRET_KEY,60)
+
+    def get_refresh_token(self):
+        return JwtHelper.generate_jwt_token(self.id,settings.SECRET_KEY,480)
 
     def __str__(self):
         return f"{self.phone}"
