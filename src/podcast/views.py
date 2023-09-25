@@ -39,3 +39,24 @@ class LikeView(APIView):
                 like.save()
         return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
 
+
+class CommentView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def post(self, request):
+        print(request.user)
+        comment_serializer = CommentSerializer(data = request.data)
+        comment_serializer.is_valid(raise_exception=True)
+        if comment_serializer.validated_data.get('model')=="podcast":
+            podcast = Podcast.objects.get(id = comment_serializer.validated_data.get("model_id"))
+            if podcast:
+                comment = Comment(content_object = podcast, account = request.user, text = comment_serializer.validated_data.get("text"))
+                comment.save()
+        elif comment_serializer.validated_data.get('model') == "episode":
+            episode = Episode.objects.get(id = comment_serializer.validated_data.get("model_id"))
+            if episode:
+                comment = Comment(content_object = episode, account = request.user, text = comment_serializer.validated_data.get("text"))
+                comment.save()
+        return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
+
