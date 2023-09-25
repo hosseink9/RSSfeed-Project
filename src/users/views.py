@@ -38,6 +38,15 @@ class VerifyOTP(APIView):
             return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
 
 
+class LoginRequiredView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request):
+        print(request.user.id)
+        return Response({'message':"success","phone":request.user.phone})
+
+
         response = Response()
 
         response.set_cookie(key='jwt', value=token, httponly=True)
