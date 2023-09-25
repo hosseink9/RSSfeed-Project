@@ -22,3 +22,12 @@ class PlaylistSerializer(serializers.ModelSerializer):
         fields = ['title','description','account','podcasts','episodes']
 
 
+
+    def update(self, instance, validated_data):
+        for podcast in validated_data.get("podcasts"):
+            instance.podcasts.add(podcast)
+        for episode in validated_data.get("episodes"):
+            instance.episodes.add(episode)
+        instance.save()
+        return instance
+
