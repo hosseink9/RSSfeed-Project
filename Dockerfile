@@ -1,8 +1,12 @@
-FROM python3
-WORKDIR /dockerrss
+FROM python:3.10
+
+WORKDIR /code
+
 COPY requirements.txt .
-RUN pip install -U pip
 RUN pip install -r requirements.txt
-COPY . .
+
+COPY . /copy/
+
 EXPOSE 8000
-CMD ["python", "manage.py", "runserver"]
+
+CMD ["python3", "manage.py", "runserver"]
