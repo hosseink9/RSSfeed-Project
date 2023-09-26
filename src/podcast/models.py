@@ -36,7 +36,7 @@ class Generator(BaseModel):
         return self.name
 
 
-class Podcast(BaseModel):
+class Podcast(models.Model):
     title = models.CharField(max_length=100)
     language = models.CharField(max_length=50)
     itunes_type = models.CharField(max_length=50)
