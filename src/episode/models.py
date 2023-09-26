@@ -16,7 +16,7 @@ class Episode(models.Model):
     pubDate = models.DateTimeField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
     itunes_player = models.CharField(null=True, blank=True,max_length=100) #We use itunes_player for fireside_playerEmbedCode too.
-    episode_podcast = models.ForeignKey(Podcast,on_delete=models.CASCADE)
+    episode_podcast = models.ForeignKey(Podcast,on_delete=models.CASCADE, related_name="episode")
     episode_author = models.ForeignKey(EpisodeAuthor,on_delete=models.CASCADE)
 
     def __str__(self):
