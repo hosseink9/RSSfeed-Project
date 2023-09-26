@@ -3,6 +3,7 @@ import datetime as dt
 from .models import Podcast,Category, Generator, Image, Owner
 from episode.models import Episode
 from author.models import EpisodeAuthor, PodcastAuthor
+from django.db.models import Max
 
 class PodcastModel:
     def __init__(self, xml=None):
@@ -129,17 +130,25 @@ class Parser:
         #--save episode--#
         assert self.check_exist() == False, "Episodes already exist."
         episodes = self.get_episode_data()
-        res_list = list()
+
+        author_list = self.get_author_objects(episodes)
+        self.save_episode(episodes, author_list, self.podcast_obj)
+
+
+    def get_author_objects(self,episode_list):
         author_list = list()
         dict_list = dict()
 
-        for i in episodes:
+        for i in episode_list:
             author = dict_list.get(i.author) or EpisodeAuthor(name=i.author) #content@audiochuck.com (audiochuck) -> (audiochuck)content@audiochuck.com
             dict_list[i.author] = author
             author_list.append(author)
 
         uniq_list = dict_list.values()
         EpisodeAuthor.objects.bulk_create(uniq_list)
+        return author_list
+
+
     def update_exist_podcast(self):
         podcast = self.get_podcast_data()
         episodes = self.get_episode_data()
@@ -159,6 +168,12 @@ class Parser:
             author_list = self.get_author_objects(episode_update_list)
 
             self.save_episode(episode_update_list, author_list, podcast_object)
+
+
+    def save_episode(self,episode_list,author_list,podcast_object):
+        res_list = list()
+
+        for index, episode in enumerate(episode_list):
             episode_field = Episode(
                 title = episode.title,
                 guid = episode.guid,
@@ -171,12 +186,10 @@ class Parser:
                 pubDate = dt.datetime.strptime(episode.pubDate, "%a, %d %b %Y %H:%M:%S %z"),
                 itunes_keywords = None if not hasattr(episode, "itunes_keywords") else episode.itunes_keywords,
                 itunes_player = None if not hasattr(episode, "itunes_player") else episode.itunes_player,
-                episode_podcast = self.podcast_obj,
+                episode_podcast = podcast_object,
                 episode_author = author_list[index]
             )
             res_list.append(episode_field)
-            # self.episodes_obj.append(e)
         Episode.objects.bulk_create(res_list)
 
-    def update_exist_podcast(self):
-        ...
+
