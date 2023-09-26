@@ -28,6 +28,15 @@ class AddPodcastView(APIView):
         return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
 
 
+class UpdatePodcastView(APIView):
+    def post(self, request):
+        file = request.FILES["xml"]
+        file = file.read()
+        parser = Parser(rss_file=file.decode("utf-8"))
+        parser.update_exist_podcast()
+        return Response({"message":"File is received."}, status.HTTP_201_CREATED)
+
+
 class LikeView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
@@ -36,7 +45,7 @@ class LikeView(APIView):
         print(request.user)
         like_serializer = LikeSerializer(data = request.data)
         like_serializer.is_valid(raise_exception=True)
-        if like_serializer.validated_data.get('model')=="podcast":
+        if like_serializer.validated_data.get('model') == "podcast":
             podcast = Podcast.objects.get(id = like_serializer.validated_data.get("model_id"))
             if podcast:
                 like = Like(content_object = podcast, account = request.user)
