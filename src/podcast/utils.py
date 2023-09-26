@@ -140,8 +140,25 @@ class Parser:
 
         uniq_list = dict_list.values()
         EpisodeAuthor.objects.bulk_create(uniq_list)
+    def update_exist_podcast(self):
+        podcast = self.get_podcast_data()
+        episodes = self.get_episode_data()
+        author = PodcastAuthor.objects.filter(name=podcast.itunes_author).first()
+        podcast_object = Podcast.objects.get(title = podcast.title, link = podcast.link, podcast_author = author)
+        episode_objects_list = Episode.objects.filter(episode_podcast = podcast_object).values_list("guid",flat=True)
 
-        for index, episode in enumerate(episodes):
+        podcast_last_update = podcast.pubDate if hasattr(podcast,"pubDate") else max(list(map(lambda item:dt.datetime.strptime(item.pubDate,"%a, %d %b %Y %H:%M:%S %z"), episodes)))
+        podcast_object_last_update = podcast_object.pubDate if podcast_object.pubDate else Episode.objects.aggregate(Max("pubDate")).get("pubDate__max")
+
+
+        episode_update_list = []
+        if podcast_object_last_update != podcast_last_update:
+            for new_episode in episodes:
+                if new_episode.guid not in episode_objects_list:
+                    episode_update_list.append(new_episode)
+            author_list = self.get_author_objects(episode_update_list)
+
+            self.save_episode(episode_update_list, author_list, podcast_object)
             episode_field = Episode(
                 title = episode.title,
                 guid = episode.guid,
