@@ -50,7 +50,7 @@ class Podcast(models.Model):
     itunes_keywords = models.TextField(null=True, blank=True)
     itunes_image = models.CharField(max_length=400)
     category = models.ManyToManyField(Category)
-    podcast_generator = models.ForeignKey(Generator,on_delete=models.CASCADE)
+    podcast_generator = models.ForeignKey(Generator,on_delete=models.CASCADE,null=True)
     podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.CASCADE)
     podcast_image = models.OneToOneField(Image,on_delete=models.CASCADE)
 
