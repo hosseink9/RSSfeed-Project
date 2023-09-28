@@ -3,6 +3,9 @@ from config import settings
 from rest_framework.views import Response
 from datetime import timedelta, datetime
 
+def generate_jti():
+    return str(uuid4().hex)
+
 class JwtHelper:
     @staticmethod
     def generate_jwt_token(user_id, secret_key, expires_in_minutes):
