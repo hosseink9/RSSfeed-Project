@@ -152,6 +152,32 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'celery': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': './log/celery_log.log',
+            'formatter':'verbose',
+        },
+    },
+    "formatters":{
+        'verbose':{
+            'format': "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            'style': '{',
+        },
+    },
+    'loggers': {
+        'django-celery': {
+            'handlers': ['celery'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
 
 CACHES = {
     'default':{
