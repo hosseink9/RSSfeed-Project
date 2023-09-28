@@ -26,3 +26,17 @@ class JwtHelper:
             return payload.get('user_id')
         except jwt.DecodeError:
             return None
+
+
+
+def refresh_token_cache(refresh_token):
+    payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+    user_id = payload.get("user_id")
+    jti = payload.get("jti")
+    exp_date = payload.get('exp')
+    iat = payload.get('iat')
+    timeout = exp_date - iat
+
+    cache.set(key=f"user_{user_id} | {jti}", value=f'{iat}', timeout=timeout)
+
+
