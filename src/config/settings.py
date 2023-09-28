@@ -152,6 +152,15 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0')
-CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+
+CACHES = {
+    'default':{
+        'BACKEND':'django_redis.cache.RedisCache',
+        'LOCATION':'redis://localhost:6379/0',
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient'
+        }
+
+    }
+}
 
