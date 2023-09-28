@@ -7,11 +7,15 @@ def generate_jti():
     return str(uuid4().hex)
 
 class JwtHelper:
+
     @staticmethod
     def generate_jwt_token(user_id, secret_key, expires_in_minutes):
+
         payload = {
             'user_id': user_id,
-            'exp': datetime.utcnow() + timedelta(minutes=expires_in_minutes)
+            'exp': datetime.utcnow() + timedelta(minutes=expires_in_minutes),
+            'iat': datetime.utcnow(),
+            'jti':generate_jti()
         }
         return jwt.encode(payload, secret_key, algorithm='HS256')
 
