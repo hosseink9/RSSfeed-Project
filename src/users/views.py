@@ -11,6 +11,8 @@ import jwt,datetime
 from .models import User
 from .serializers import UserSerializer, SerializerLogin, LoginOTPSerializer
 from .auth import JwtAuthentication
+from .utils import rt_cache, validate_cache, JwtHelper
+from config import settings
 
 
 
@@ -38,7 +40,9 @@ class VerifyOTP(APIView):
             user=User.objects.get(phone=request.session.get('phone'))
             access_token=user.get_access_token()
             refresh_token=user.get_refresh_token()
+            rt_cache(refresh_token)
             return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
+
 
 class RefreshTokenView(APIView):
 
