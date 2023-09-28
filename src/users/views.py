@@ -40,6 +40,37 @@ class VerifyOTP(APIView):
             refresh_token=user.get_refresh_token()
             return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
 
+class RefreshTokenView(APIView):
+
+    def post(self, request):
+
+        refresh_token = request.data.get('refresh_token')
+        try:
+            payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+        except: jwt.ExpiredSignatureError
+
+
+        if not validate_cache(refresh_token):
+            return Response(data={"message": "invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        user_id = payload.get('user_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+        except: User.DoesNotExist
+
+        access_token=user.get_access_token()
+        refresh_token=user.get_refresh_token()
+
+        rt_cache(refresh_token)
+
+        data = {
+            "access": access_token,
+            "refresh": refresh_token,
+        }
+
+        return Response(data, status=status.HTTP_201_CREATED)
+
 
 class LoginRequiredView(APIView):
     authentication_classes = [JwtAuthentication]
