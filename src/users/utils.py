@@ -47,3 +47,15 @@ def check_cache(user_id, jti):
     return None
 
 
+def validate_cache(refresh_token):
+    payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
+    user_id = payload.get('user_id')
+    jti = payload.get('jti')
+    iat = payload.get('iat')
+    cached_token = check_cache(user_id, jti)
+
+    if cached_token is None:
+        return False
+
+    return cached_token == str(iat)
+
