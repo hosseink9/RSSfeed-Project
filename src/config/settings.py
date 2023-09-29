@@ -156,12 +156,13 @@ AUTHENTICATION_BACKENDS = [
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379')
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379')
 
-# CELERY_BEAT_SCHEDULE = {
-#     'task_schedule' :{
-#         'task': "podcast.tasks.update_exist_podcast",
-#         "schedule": crontab(hour = 12)
-#     }
-# }
+CELERY_BEAT_SCHEDULE = {
+    "sample_task": {
+        "task": "episode.tasks.update_all_podcast",
+        "schedule": crontab(minute="*/1"),
+    },
+}
+
 
 LOGGING = {
     'version': 1,
@@ -197,7 +198,6 @@ CACHES = {
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         }
-
     }
 }
 
