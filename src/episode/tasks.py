@@ -14,3 +14,11 @@ def update_all_podcast():
     for url in url_list:
         update_podcast.delay(url)
 
+@shared_task
+def update_podcast(url):
+    try:
+        data = requests.get(url).text
+        parser = Parser(data)
+        parser.update_exist_podcast()
+    except Exception as e:
+        logger.error(e)
