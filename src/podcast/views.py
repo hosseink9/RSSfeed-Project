@@ -1,11 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from users.auth import JwtAuthentication
 from .models import Podcast
-from users.models import User
 from episode.models import Episode
 from .serializer import PodcastSerializer
 from .utils import Parser
@@ -21,6 +20,9 @@ class PodcastListView(APIView):
 
 
 class AddPodcastView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAdminUser]
+
     def post(self, request):
         file = request.FILES["xml"]
         file = file.read()
@@ -29,12 +31,15 @@ class AddPodcastView(APIView):
 
 
 class UpdatePodcastView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes = [IsAdminUser]
+
     def post(self, request):
         file = request.FILES["xml"]
         file = file.read()
         parser = Parser(rss_file=file.decode("utf-8"))
         parser.update_exist_podcast()
-        return Response({"message":"File is received."}, status.HTTP_201_CREATED)
+        return Response({"message":"xml is going to update"}, status.HTTP_201_CREATED)
 
 
 class LikeView(APIView):
@@ -84,8 +89,6 @@ class PlaylistView(APIView):
     permission_classes=[IsAuthenticated]
 
     def post(self, request):
-        # print(request.user)
-        print(request.data)
         DATA =  request.data.copy()
         DATA['account'] = request.user
         DATA.pop("playlist")
