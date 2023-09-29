@@ -57,4 +57,12 @@ def save_episode(self,episode_list,author_list,podcast_id):
 
 
 
+@shared_task(bind=True, base=RetryTask,)
+def update_task(self,podcast,episodes):
+        sleep(30)
+        author = PodcastAuthor.objects.filter(name=podcast.get("itunes_author")).first()
+        podcast_object = Podcast.objects.get(title = podcast.get("title"), link = podcast.get("link"))
+        episode_objects_list = Episode.objects.filter(episode_podcast = podcast_object).values_list("guid",flat=True)
+
+
 
