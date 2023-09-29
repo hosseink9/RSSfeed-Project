@@ -67,6 +67,10 @@ def check_expired_date(exp_date):
     return datetime.now() < exp_date
 
 
+
+
+
+
 # def refresh_token_gen(user_id: int):
 
 #     refresh_token = token_encode({
@@ -79,16 +83,9 @@ def check_expired_date(exp_date):
 
 #     return refresh_token
 
-
-
-
-
-
 # def token_encode(payload):
 #     token = jwt.encode(payload=payload, key=settings.SECRET_KEY, algorithm='HS256').decode('utf-8')
 #     return token
-
-
 
 # def token_decode(token):
 #     payload = jwt.decode(jwt=token, key=settings.SECRET_KEY, algorithms=['HS256'])
