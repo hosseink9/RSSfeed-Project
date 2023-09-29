@@ -14,7 +14,7 @@ class Like(BaseModel):
     content_object = GenericForeignKey("content_type", "object_id")
 
     def __str__(self):
-        return self.account
+        return f'{self.account}'
 
 class Comment(BaseModel):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
