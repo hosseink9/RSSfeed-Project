@@ -71,5 +71,23 @@ def update_task(self,podcast,episodes):
         if not podcast_object:
             return "This podcast didn't save in database"
 
+        episode_update_list = []
+        if podcast_object_last_update < podcast_last_update:
+            for new_episode in episodes:
+                if new_episode.guid not in episode_objects_list:
+                    episode_update_list.append(new_episode)
+            author_list = author(episode_update_list)
+
+            save_episode(episode_update_list, author_list, podcast_object)
+            return "Updated successfully"
+
+
+        if self.request.retries > self.retry_kwargs['max_retries']:
+            logger.error(f'{self.request.retries},{self.retry_kwargs["max_retries"]}')
+        elif self.request.retries == self.retry_kwargs['max_retries']:
+            logger.error("[Task isn't successfully]")
+
+        return "xml file has not new episode for update!!"
+
 
 
