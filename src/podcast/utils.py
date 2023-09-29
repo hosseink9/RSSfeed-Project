@@ -114,14 +114,13 @@ class Parser:
             podcast_author = author,
             podcast_image = image
         )
-        print(self.get_podcast_data())
         podcast_object.category.add(category)
         podcast_object.save()
         self.podcast_object = podcast_object
         return podcast_object
 
     def save_episode_in_db(self):
-        #--save episode--#
+
         assert self.check_exist()[1] == False, "Episodes already exist."
         episodes = self.get_episode_data()
         author_list = author.delay(episodes).get()
