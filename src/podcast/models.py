@@ -41,6 +41,7 @@ class Generator(BaseModel):
 
 class Podcast(models.Model):
     title = models.CharField(max_length=100)
+    url = models.URLField(null=True,blank=True)
     language = models.CharField(max_length=50)
     itunes_type = models.CharField(max_length=50)
     copy_right = models.CharField(max_length=100)
