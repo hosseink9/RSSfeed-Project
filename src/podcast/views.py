@@ -90,7 +90,7 @@ class PlaylistView(APIView):
 
     def post(self, request):
         DATA =  request.data.copy()
-        DATA['account'] = request.user
+        DATA['account'] = request.user.id
         DATA.pop("playlist")
         playlist_serializer = PlaylistSerializer(data = DATA, partial = True ,instance=Playlist.objects.get(id=request.data.get("playlist")))
         playlist_serializer.is_valid(raise_exception=True)
