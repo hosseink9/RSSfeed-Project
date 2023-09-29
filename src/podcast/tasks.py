@@ -64,5 +64,9 @@ def update_task(self,podcast,episodes):
         podcast_object = Podcast.objects.get(title = podcast.get("title"), link = podcast.get("link"))
         episode_objects_list = Episode.objects.filter(episode_podcast = podcast_object).values_list("guid",flat=True)
 
+        podcast_last_update = dt.datetime.strptime(podcast.get("pubDate"),"%a, %d %b %Y %H:%M:%S %z") if podcast.get("pubDate") else max(list(map(lambda item:dt.datetime.strptime(item.get("pubDate"),"%a, %d %b %Y %H:%M:%S %z"), episodes)))
+
+        podcast_object_last_update = podcast_object.pubDate or Episode.objects.aggregate(Max("pubDate")).get("pubDate__max")
+
 
 
