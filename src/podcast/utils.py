@@ -182,3 +182,6 @@ class Parser:
         podcast_object_last_update = podcast_object.pubDate or Episode.objects.aggregate(Max("pubDate")).get("pubDate__max")
 
 
+        if not podcast_object:
+            return "This podcast didn't save in database"
+
