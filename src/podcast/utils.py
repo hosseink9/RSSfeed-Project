@@ -149,6 +149,28 @@ class Parser:
 
 
 
+    def save_episode_in_db(self,episode_list,author_list,podcast_object):
+        res_list = list()
+        for index, episode in enumerate(episode_list):
+            episode_field = Episode(
+                title = episode.get("title"),
+                guid = episode.get("guid"),
+                itunes_duration = episode.get("itunes_duration"),
+                itunes_episode_type = episode.get("itunes_episodeType"),
+                itunes_explicit = episode.get("itunes_explicit"),
+                description = episode.get("description"),
+                enclosure = episode.get('enclosure'),
+                link = episode.get("link"),
+                pubDate = dt.datetime.strptime(episode.get("pubDate").replace('GMT','+0000'), "%a, %d %b %Y %H:%M:%S %z"),
+                itunes_keywords = episode.get("itunes_keywords",None),
+                itunes_player = episode.get("itunes_player",None),
+                episode_podcast = podcast_object, # Podcast.objects.get(id=podcast_id),
+                episode_author = EpisodeAuthor.objects.get(id=author_list[index]) if author_list[index] else None
+            )
+            res_list.append(episode_field)
+        Episode.objects.bulk_create(res_list)
+
+
     def update_exist_podcast(self):
         update = update_task.delay(self.get_podcast_data(),self.get_episode_data())
         return update
