@@ -22,9 +22,11 @@ class Parser:
         podcast_object = Podcast.objects.filter(title = podcast_data.get("title"),link= podcast_data.get("link"))
         self.podcast_object = podcast_object.get() if podcast_object else None
         self.episodes_obj = list()
+        # self.save_podcast_in_db() if save is True else None
+        # self.save_episode() if save is True else None
         if save:
             self.save_podcast_in_db() if not self.check_exist()[0] else None
-            self.save_episode_in_db() if not self.check_exist()[1] else None
+            self.save_episode() if not self.check_exist()[1] else None
 
     def _read_rss_file(self):
         with open(self.rss_path, "rt", encoding="utf-8") as file:
@@ -64,6 +66,7 @@ class Parser:
         return podcast
 
     def check_exist(self):
+
         podcast_dict = self.get_podcast_data()
         old_podcast = Podcast.objects.filter(title=podcast_dict.get("title"), link=podcast_dict.get("link"))
         if old_podcast:
@@ -89,6 +92,7 @@ class Parser:
             episode_list.append(episode1)
 
         return episode_list
+
 
     def save_podcast_in_db(self):
         #--save podcast--#
@@ -124,7 +128,6 @@ class Parser:
         self.podcast_object = podcast_object
         return podcast_object
 
-    def save_episode_in_db(self):
 
     def save_episode(self):
         #--save episode--#
@@ -185,3 +188,14 @@ class Parser:
         if not podcast_object:
             return "This podcast didn't save in database"
 
+        episode_update_list = []
+        if podcast_object_last_update < podcast_last_update:
+            for new_episode in episodes:
+                if new_episode.get("guid") not in episode_objects_list:
+                    episode_update_list.append(new_episode)
+            author_list = self.get_author_objects(episode_update_list)
+
+            self.save_episode_in_db(episode_update_list, author_list, podcast_object)
+            return "Updated successfully"
+
+        return "xml file has not new episode for update!!"
