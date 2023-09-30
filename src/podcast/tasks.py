@@ -4,9 +4,8 @@ import datetime as dt
 from time import sleep
 import logging
 
-from .models import Podcast
-from episode.models import Episode
-from author.models import PodcastAuthor, EpisodeAuthor
+from .utils import Parser
+
 
 logger = logging.getLogger('django-celery')
 
