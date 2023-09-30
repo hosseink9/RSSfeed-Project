@@ -11,6 +11,8 @@ from .utils import Parser
 from feedback.serializer import LikeSerializer, CommentSerializer, PlaylistSerializer
 from feedback.models import Like, Comment, Playlist
 
+from .tasks import save_episode, update_task
+
 
 class PodcastListView(APIView):
     def get(self, request):
@@ -26,7 +28,7 @@ class AddPodcastView(APIView):
     def post(self, request):
         file = request.FILES["xml"]
         file = file.read()
-        Parser(rss_file=file.decode("utf-8"), save=True)
+        save_episode.delay(file)
         return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
 
 
@@ -37,8 +39,7 @@ class UpdatePodcastView(APIView):
     def post(self, request):
         file = request.FILES["xml"]
         file = file.read()
-        parser = Parser(rss_file=file.decode("utf-8"))
-        parser.update_exist_podcast()
+        update_task.delay(file)
         return Response({"message":"xml is going to update"}, status.HTTP_201_CREATED)
 
 
