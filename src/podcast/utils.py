@@ -1,8 +1,13 @@
 import re
 import datetime as dt
+from django.db.models import Max
+import logging
+
 from .models import Podcast,Category, Generator, Image, Owner
-from author.models import PodcastAuthor
-from .tasks import update_task, save_episode, author
+from author.models import PodcastAuthor, EpisodeAuthor
+from episode.models import Episode
+
+logger = logging.getLogger("django-celery")
 
 
 class Parser:
