@@ -174,3 +174,4 @@ class Parser:
     def update_exist_podcast(self):
         podcast = self.get_podcast_data()
         episodes = self.get_episode_data()
+        podcast_object = Podcast.objects.get(title = podcast.get("title"), link = podcast.get("link"))
