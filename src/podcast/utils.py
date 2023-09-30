@@ -126,11 +126,13 @@ class Parser:
 
     def save_episode_in_db(self):
 
+    def save_episode(self):
+        #--save episode--#
         assert self.check_exist()[1] == False, "Episodes already exist."
         episodes = self.get_episode_data()
-        author_list = author.delay(episodes).get()
+        author_list = self.get_author_objects(episodes)
 
-        self.parse_episode(episodes, author_list, self.podcast_object)
+        self.save_episode_in_db(episodes, author_list, self.podcast_object)
 
 
     def update_exist_podcast(self):
