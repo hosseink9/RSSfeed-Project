@@ -172,10 +172,5 @@ class Parser:
 
 
     def update_exist_podcast(self):
-        update = update_task.delay(self.get_podcast_data(),self.get_episode_data())
-        return update
-
-
-    def parse_episode(self,episode_list,author_list,podcast_object):
-        episode = save_episode.delay(episode_list,author_list,podcast_object.id).get()
-        return episode
+        podcast = self.get_podcast_data()
+        episodes = self.get_episode_data()
