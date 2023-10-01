@@ -46,9 +46,9 @@ class PodcastUrl(BaseModel):
 
     def __str__(self):
         return self.url
+
 class Podcast(models.Model):
     title = models.CharField(max_length=100)
-    url = models.URLField(null=True,blank=True)
     language = models.CharField(max_length=50)
     itunes_type = models.CharField(max_length=50)
     copy_right = models.CharField(max_length=100)
@@ -64,6 +64,7 @@ class Podcast(models.Model):
     podcast_generator = models.ForeignKey(Generator,on_delete=models.CASCADE,null=True)
     podcast_author = models.ForeignKey(PodcastAuthor,on_delete=models.CASCADE)
     podcast_image = models.OneToOneField(Image,on_delete=models.CASCADE)
+    podcast_url = models.OneToOneField(PodcastUrl, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.id}: {self.title}"
