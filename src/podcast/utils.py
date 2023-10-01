@@ -98,11 +98,11 @@ class Parser:
         #--save podcast--#
         assert self.check_exist()[0] == False, "Podcast already exist."
         pod = self.get_podcast_data()
-        author = PodcastAuthor.objects.create(name=pod.get("itunes_author"))
-        category = Category.objects.create(name=pod.get("itunes_category"))
-        generator = Generator.objects.create(name=pod.get("generator")) if pod.get("generator") else None
-        image = Image.objects.create(url= pod.get("url",pod.get('itunes_image'))) if pod.get("url",pod.get('itunes_image')) else None
-        owner = Owner.objects.create(name=pod.get("itunes_name"), email=pod.get("itunes_email"))
+        author = PodcastAuthor.objects.get_or_create(name=pod.get("itunes_author"))[0]
+        category = Category.objects.get_or_create(name=pod.get("itunes_category"))[0]
+        generator = Generator.objects.get_or_create(name=pod.get("generator"))[0] if pod.get("generator") else None
+        image = Image.objects.get_or_create(url= pod.get("url",pod.get('itunes_image')))[0] if pod.get("url",pod.get('itunes_image')) else None
+        owner = Owner.objects.get_or_create(name=pod.get("itunes_name"), email=pod.get("itunes_email"))[0]
 
         podcast_object = Podcast.objects.create(
             title = pod.get("title"),
