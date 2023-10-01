@@ -121,8 +121,11 @@ class Parser:
             # category = category,
             podcast_generator = generator,
             podcast_author = author,
-            podcast_image = image
+            podcast_image = image,
+            podcast_url = self.url
         )
+        self.url.is_save = True
+        self.url.save()
         podcast_object.category.add(category)
         podcast_object.save()
         self.podcast_object = podcast_object
