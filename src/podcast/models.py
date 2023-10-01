@@ -39,6 +39,13 @@ class Generator(BaseModel):
         return self.name
 
 
+class PodcastUrl(BaseModel):
+    url = models.URLField(unique=True)
+    title = models.CharField(max_length=150)
+    is_saved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.url
 class Podcast(models.Model):
     title = models.CharField(max_length=100)
     url = models.URLField(null=True,blank=True)
