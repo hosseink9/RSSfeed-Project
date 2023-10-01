@@ -23,8 +23,6 @@ class Parser:
         podcast_object = Podcast.objects.filter(title = podcast_data.get("title"),link= podcast_data.get("link"))
         self.podcast_object = podcast_object.get() if podcast_object else None
         self.episodes_obj = list()
-        # self.save_podcast_in_db() if save is True else None
-        # self.save_episode() if save is True else None
         if save:
             self.save_podcast_in_db() if not self.check_exist()[0] else None
             self.save_episode() if not self.check_exist()[1] else None
@@ -67,7 +65,6 @@ class Parser:
         return podcast
 
     def check_exist(self):
-
         podcast_dict = self.get_podcast_data()
         old_podcast = Podcast.objects.filter(title=podcast_dict.get("title"), link=podcast_dict.get("link"))
         if old_podcast:
@@ -107,7 +104,6 @@ class Parser:
 
         podcast_object = Podcast.objects.create(
             title = pod.get("title"),
-            url = pod.get("atom_link"),
             language = pod.get("language"),
             itunes_type = pod.get("itunes_type"),
             copy_right = pod.get("copyright"),
@@ -119,7 +115,6 @@ class Parser:
             itunes_subtitle = pod.get("itunes_subtitle",None) ,
             itunes_keywords = pod.get("itunes_keywords", None) ,
             itunes_image = pod.get("itunes_image"),
-            # category = category,
             podcast_generator = generator,
             podcast_author = author,
             podcast_image = image,
