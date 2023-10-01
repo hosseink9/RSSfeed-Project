@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import RegisterView, SendOTPView,VerifyOTP,LoginRequiredView, LogoutAPIView,RefreshTokenView
+from .views import RegisterView, SendOTPView,VerifyOTP,LoginRequiredView, LogoutAPIView,RefreshTokenView, ChangePasswordView
 
 app_name = 'users'
 
@@ -11,4 +11,5 @@ urlpatterns = [
     path('requiredlogin/', LoginRequiredView.as_view()),
     path('logout/', LogoutAPIView.as_view()),
     path('refreshtoken/', RefreshTokenView.as_view()),
+    path('changepassword/<int:pk>/', ChangePasswordView.as_view()),
 ]
