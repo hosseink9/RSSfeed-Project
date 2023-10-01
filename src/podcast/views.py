@@ -46,9 +46,8 @@ class UpdatePodcastView(APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request):
-        file = request.FILES["xml"]
-        file = file.read()
-        update_task.delay(file)
+        data = request.data['xml']
+        update_podcast.delay(data)
         return Response({"message":"xml is going to update"}, status.HTTP_201_CREATED)
 
 
