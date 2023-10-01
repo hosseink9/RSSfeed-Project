@@ -36,9 +36,8 @@ class AddPodcastView(APIView):
     permission_classes=[IsAdminUser]
 
     def post(self, request):
-        file = request.FILES["xml"]
-        file = file.read()
-        save_episode.delay(file)
+        data = request.data['url']
+        save_podcast.delay(data)
         return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
 
 
