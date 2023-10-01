@@ -1,14 +1,15 @@
 from celery import shared_task, Task
 import logging
+import requests
 
 from .utils import Parser
-
+from .models import Podcast, PodcastUrl
 
 logger = logging.getLogger('django-celery')
 
 
 class RetryTask(Task):
-    autoretry_for = (Exception, KeyError)
+    autoretry_for = (Exception,)
     retry_kwargs = {'max_retries': 5}
     retry_backoff = 2
 
