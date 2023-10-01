@@ -60,10 +60,10 @@ class PhoneNumberField(models.CharField):
 class User(AbstractBaseUser,PermissionsMixin, BaseModel):
     phone = PhoneNumberField(validators=[phone_validator], unique=True, max_length=20)
 
-    username = models.CharField(max_length=50,unique=True)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
+    username = models.CharField(max_length=50,unique=True,null=True,blank=True)
+    email = models.EmailField(unique=True,null=True,blank=True)
+    first_name = models.CharField(max_length=50,null=True,blank=True)
+    last_name = models.CharField(max_length=50,null=True,blank=True)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
