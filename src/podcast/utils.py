@@ -15,7 +15,8 @@ class Parser:
     tag_pattern = re.compile("<([^\<\>\[\]\- ]*)(?:\s*(\S*)=\"([^\"]*?)\"[^\>\]\[]*)*>")
     key_value_pair_pattern = re.compile('([^ ]*?)=\"(.*?)\"')
 
-    def __init__(self, rss_path=None, rss_file=None, save=False):
+    def __init__(self, rss_path=None, rss_file=None, save=False, podcast_url=None):
+        self.url = podcast_url
         self.rss_path = rss_path
         self.rss_file = rss_file or self._read_rss_file()
         podcast_data = self.get_podcast_data()
