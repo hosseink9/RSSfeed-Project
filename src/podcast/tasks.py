@@ -15,21 +15,18 @@ class RetryTask(Task):
 
 
 @shared_task(bind=True, base=RetryTask)
-def save_episode(self,file):
-    Parser(rss_file=file.decode("utf-8"), save=True)
+def save_podcast(self,url):
+    try:
+        logger.info(msg='Podcast going to parsing')
+        data = requests.get(url).text
+        podcast_url = PodcastUrl.objects.get(url=url)
+        Parser(podcast_url=podcast_url, rss_file=data, save=True)
+
+        if self.request.retries > self.retry_kwargs['max_retries']:
+            logger.error(f'{self.request.retries},{self.retry_kwargs["max_retries"]}')
+        elif self.request.retries == self.retry_kwargs['max_retries']:
+            logger.error("[Task isn't successfully]")
+
+    except ConnectionError as e:
+        logger.error(e)
     return 'OK'
-
-
-@shared_task(bind=True, base=RetryTask,)
-def update_task(self,file):
-    parser = Parser(rss_file=file.decode("utf-8"))
-    parser.update_exist_podcast()
-    if self.request.retries > self.retry_kwargs['max_retries']:
-        logger.error(f'{self.request.retries},{self.retry_kwargs["max_retries"]}')
-    elif self.request.retries == self.retry_kwargs['max_retries']:
-        logger.error("[Task isn't successfully]")
-
-    return 'OK'
-
-
-
