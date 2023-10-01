@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Podcast
+from .models import Podcast, PodcastUrl
 
 
 class PodcastSerializer(ModelSerializer):
