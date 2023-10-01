@@ -21,6 +21,16 @@ class PodcastListView(APIView):
         return Response(ser_data.data, status=status.HTTP_200_OK)
 
 
+class AddPodcastUrlView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAdminUser]
+
+    def post(self,request):
+        serializer = PodcastUrlSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'message': "URL is saved"}, status=status.HTTP_201_CREATED)
+
 class AddPodcastView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAdminUser]
