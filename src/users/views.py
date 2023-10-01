@@ -1,15 +1,13 @@
 from rest_framework.views import Response, APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.exceptions import AuthenticationFailed
-from django.contrib.auth.models import update_last_login
+from rest_framework import generics
 from rest_framework.views import Response
-from django.contrib.auth import authenticate
 
 import jwt,datetime
 
 from .models import User
-from .serializers import UserSerializer, SerializerLogin, LoginOTPSerializer
+from .serializers import UserSerializer, SerializerLogin, LoginOTPSerializer, ChangePasswordSerializer
 from .auth import JwtAuthentication
 from .utils import refresh_token_cache, validate_cache, JwtHelper
 from config import settings
@@ -92,3 +90,16 @@ class LogoutAPIView(APIView):
         response.delete_cookie(key="AT")
         response.data = {"message": "success"}
         return response
+
+class ChangePasswordView(APIView):
+
+    authentication_classes = [JwtAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
+
+    def patch(self,request,pk):
+        user = User.objects.get(pk=pk)
+        serializer = self.serializer_class(data=request.data,instance=user,context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        serializer.update()
+        return Response({'message':'OK'})
