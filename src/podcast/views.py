@@ -2,16 +2,16 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
+from podcast.models import Podcast
 from users.auth import JwtAuthentication
-from .models import Podcast
+
+from episode.tasks import update_podcast
 from episode.models import Episode
-from .serializer import PodcastSerializer
-from .utils import Parser
+from .serializer import PodcastSerializer, PodcastUrlSerializer
 from feedback.serializer import LikeSerializer, CommentSerializer, PlaylistSerializer
 from feedback.models import Like, Comment, Playlist
 
-from .tasks import save_episode, update_task
+from .tasks import save_podcast
 
 
 class PodcastListView(APIView):
