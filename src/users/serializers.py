@@ -1,11 +1,9 @@
 from rest_framework import serializers
 from .models import User
-from django.contrib.auth import authenticate, get_user_model
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.password_validation import validate_password
 import random
 from datetime import timedelta
 from django.utils import timezone
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -26,15 +24,13 @@ class UserSerializer(serializers.ModelSerializer):
 class SerializerLogin(serializers.Serializer):
 
     phone = serializers.CharField(required=True, allow_null=False)
-
+    # password = serializers.CharField
 
     def validate(self, data):
         phone = data.get('phone')
 
         if not User.objects.filter(phone=phone).exists():
             raise serializers.ValidationError
-
-
 
         return data
 
@@ -61,3 +57,31 @@ class LoginOTPSerializer(serializers.Serializer):
         return data
 
 
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    password = serializers.CharField()
+    password2 = serializers.CharField()
+    old_password = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ['password','password2','old_password']
+
+
+    def validate(self, data):
+        user = self.context['request'].user
+        if not data['password'] == data['password2']:
+            raise serializers.ValidationError({"password": "Password fields didn't match."})
+        elif data['password'] == data['old_password']:
+            raise serializers.ValidationError({"password": "New password likes old password!"})
+
+        if not user.check_password(data['old_password']):
+            raise serializers.ValidationError({"old_password": "Old password is not correct"})
+        return data
+
+
+    def update(self):
+        instance = self.context['request'].user
+        instance.set_password(self.validated_data['password'])
+        instance.save()
+
+        return instance
