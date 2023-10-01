@@ -24,7 +24,6 @@ class UserSerializer(serializers.ModelSerializer):
 class SerializerLogin(serializers.Serializer):
 
     phone = serializers.CharField(required=True, allow_null=False)
-    # password = serializers.CharField
 
     def validate(self, data):
         phone = data.get('phone')
