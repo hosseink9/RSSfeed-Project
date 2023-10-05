@@ -19,3 +19,12 @@ class Publish:
         self.chanel.basic_publish(exchange = '', routing_key = 'login',
                                     properties = pika.BasicProperties(delivery_mode=2), body =json.dumps(notification)) # properties = pika.BasicProperties(reply_to = self.qname, correlation_id=self.corr_id)
 
+    def register(self, username, request_META):
+        notification={
+            'username' : username,
+            'message' : f"{username} is register; {request_META}"
+        }
+        self.response = None
+        # self.corr_id = str(uuid.uuid4())
+        self.chanel.basic_publish(exchange = '', routing_key = 'register',properties = pika.BasicProperties(delivery_mode=2), body = json.dumps(notification))
+
