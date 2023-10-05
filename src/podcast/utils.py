@@ -6,6 +6,7 @@ import logging
 from .models import Podcast,Category, Generator, Image, Owner
 from author.models import PodcastAuthor, EpisodeAuthor
 from episode.models import Episode
+from main.publisher import Publish
 
 logger = logging.getLogger("django-celery")
 
@@ -195,6 +196,7 @@ class Parser:
             author_list = self.get_author_objects(episode_update_list)
 
             self.save_episode_in_db(episode_update_list, author_list, podcast_object)
+            Publish.update_podcast(self,podcast_object)
             return "Updated successfully"
 
         return "xml file has not new episode for update!!"
