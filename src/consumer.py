@@ -34,3 +34,13 @@ def register_callback(chanel, method, properties, body):
     notification_info = NotificationInfo.objects.create(message=data['message'])
     Notification.objects.create(user = user, message = notification_info)
 
+def register_consume():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    chanel = connection.channel()
+
+    chanel.queue_declare(queue='register')
+    chanel.basic_consume(queue='register', on_message_callback=login_callback)
+
+    chanel.start_consuming()
+
+
