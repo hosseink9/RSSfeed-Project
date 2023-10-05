@@ -84,3 +84,10 @@ class User(AbstractBaseUser,PermissionsMixin, BaseModel):
 
     def __str__(self):
         return f"{self.phone}"
+
+
+class NotificationInfo(BaseModel):
+        message = models.TextField()
+
+        def __str__(self):
+            return self.notification
