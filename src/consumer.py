@@ -54,3 +54,11 @@ def update_podcast_callback(chanel, method, properties, body):
         user = User.objects.get(id = detail.user.id)
         Notification.objects.create(user = user, message = notification)
 
+def update_podcast_consume():
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    chanel = connection.channel()
+
+    chanel.queue_declare(queue='update_podcast')
+    chanel.basic_consume(queue='update_podcast', on_message_callback=login_callback)
+
+    chanel.start_consuming()
