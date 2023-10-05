@@ -28,3 +28,12 @@ class Publish:
         # self.corr_id = str(uuid.uuid4())
         self.chanel.basic_publish(exchange = '', routing_key = 'register',properties = pika.BasicProperties(delivery_mode=2), body = json.dumps(notification))
 
+    def update_podcast(self, podcast):
+        notification={
+            'podcast' : podcast,
+            'message' : f"{podcast} has new episodes"
+        }
+        self.response = None
+        self.chanel.basic_publish(exchange = '', routing_key = 'update_podcast',
+                                    properties = pika.BasicProperties(delivery_mode=2), body =notification)
+
