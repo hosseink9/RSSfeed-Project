@@ -38,12 +38,16 @@ class VerifyOTP(APIView):
 
     def post(self, request):
         serliazer=LoginOTPSerializer(data=request.data, context={'request':request})
-        if serliazer.is_valid(raise_exception=True):
-            user=User.objects.get(phone=request.session.get('phone'))
-            access_token=user.get_access_token()
-            refresh_token=user.get_refresh_token()
-            refresh_token_cache(refresh_token)
-            return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
+        serliazer.is_valid(raise_exception=True)
+        user=User.objects.get(phone=request.session.get('phone'))
+        access_token=user.get_access_token()
+        refresh_token=user.get_refresh_token()
+        refresh_token_cache(refresh_token)
+
+        request_META = request.META.get('HTTP_USER_AGENT')
+        username = user.username
+        Publish().login(username=username, request_META=request_META)
+        return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
 
 
 class RefreshTokenView(APIView):
