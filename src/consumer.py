@@ -44,3 +44,13 @@ def register_consume():
     chanel.start_consuming()
 
 
+def update_podcast_callback(chanel, method, properties, body):
+    data = body
+
+    playlist = Playlist.objects.get(podcasts = data['podcast'])
+
+    for detail in playlist:
+        notification = NotificationInfo.objects.create(message = data['message'])
+        user = User.objects.get(id = detail.user.id)
+        Notification.objects.create(user = user, message = notification)
+
