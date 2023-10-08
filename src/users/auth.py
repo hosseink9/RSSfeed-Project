@@ -3,11 +3,13 @@ from .models import User
 
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
+import logging
 
 from .utils import JwtHelper
 from config.settings import SECRET_KEY
 from .models import User
 
+logger = logging.getLogger('django_API')
 
 class UserAuthBackend(BaseBackend):
     def authenticate(self, request, phone=None, password=None, **kwargs):
