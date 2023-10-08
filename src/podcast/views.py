@@ -29,11 +29,8 @@ class AddPodcastUrlView(APIView):
 
     def post(self,request):
         serializer = PodcastUrlSerializer(data=request.data)
-        if not serializer.is_valid():
-            logger.error("Podcast Serializer is Invalid!!")
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
-        logger.info('Give podcast URL')
         return Response({'message': "URL is saved"}, status=status.HTTP_201_CREATED)
 
 class AddPodcastView(APIView):
@@ -42,7 +39,11 @@ class AddPodcastView(APIView):
 
     def post(self, request):
         data = request.data['url']
+        if not data:
+            logger.error("URL is Invalid")
+            raise Response({'message':'URL is invalid!'}, status=status.HTTP_400_BAD_REQUEST)
         save_podcast.delay(data)
+        logger.info('Give podcast for parsing')
         return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
 
 
