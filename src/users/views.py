@@ -69,17 +69,22 @@ class RefreshTokenView(APIView):
         refresh_token = request.data.get('refresh_token')
         try:
             payload = jwt.decode(refresh_token, settings.SECRET_KEY, algorithms=['HS256'])
-        except: jwt.ExpiredSignatureError
+        except:
+            logger.error("jwt is expired")
+            jwt.ExpiredSignatureError
 
 
         if not validate_cache(refresh_token):
+            logger.error("Invalid refresh token!")
             return Response(data={"message": "invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
-
+        logger.info("Valid refresh token")
         user_id = payload.get('user_id')
 
         try:
             user = User.objects.get(id=user_id)
-        except: User.DoesNotExist
+        except:
+            logger.error("User does not exist!!")
+            User.DoesNotExist
 
         access_token=user.get_access_token()
         refresh_token=user.get_refresh_token()
@@ -90,7 +95,7 @@ class RefreshTokenView(APIView):
             "access": access_token,
             "refresh": refresh_token,
         }
-
+        logger.info("Refresh token is success")
         return Response(data, status=status.HTTP_201_CREATED)
 
 
