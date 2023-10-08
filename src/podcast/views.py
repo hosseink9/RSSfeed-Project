@@ -103,7 +103,10 @@ class CommentView(APIView):
     def post(self, request):
         print(request.user)
         comment_serializer = CommentSerializer(data = request.data)
-        comment_serializer.is_valid(raise_exception=True)
+        if not comment_serializer.is_valid():
+            logger.error("Comment Serializer is Invalid!!")
+            return Response(comment_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         if comment_serializer.validated_data.get('model')=="podcast":
             podcast = Podcast.objects.get(id = comment_serializer.validated_data.get("model_id"))
             if podcast:
