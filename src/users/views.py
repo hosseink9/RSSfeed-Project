@@ -45,8 +45,11 @@ class SendOTPView(APIView):
 class VerifyOTP(APIView):
 
     def post(self, request):
-        serliazer=LoginOTPSerializer(data=request.data, context={'request':request})
-        serliazer.is_valid(raise_exception=True)
+        serializer=LoginOTPSerializer(data=request.data, context={'request':request})
+        if not serializer.is_valid():
+            logger.error("Login OTP Serializer is Invalid!!")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         user=User.objects.get(phone=request.session.get('phone'))
         access_token=user.get_access_token()
         refresh_token=user.get_refresh_token()
