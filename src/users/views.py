@@ -58,7 +58,8 @@ class VerifyOTP(APIView):
         request_META = request.META.get('HTTP_USER_AGENT')
         username = user.username
         Publish().login(username=username, request_META=request_META)
-        return Response(data={'message':"success", "AT":access_token, "RT":refresh_token})
+        logger.info(f"{username} is login")
+        return Response(data={'message':"login is success", "AT":access_token, "RT":refresh_token})
 
 
 class RefreshTokenView(APIView):
