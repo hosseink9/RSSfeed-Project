@@ -77,6 +77,10 @@ class LikeView(APIView):
             if podcast:
                 like = Like(content_object = podcast, account = request.user)
                 like.save()
+                logger.info("Like on podcast is registered")
+            else:
+                logger.error("Podcast is invalid!!")
+                return Response({'message':'Podcast is invalid!'},status=status.HTTP_400_BAD_REQUEST)
         elif like_serializer.validated_data.get('model') == "episode":
             episode = Episode.objects.get(id = like_serializer.validated_data.get("model_id"))
             if episode:
