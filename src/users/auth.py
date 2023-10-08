@@ -39,13 +39,15 @@ class JwtAuthentication(BaseAuthentication):
     def authenticate(self, request):
         auth_header=request.META.get("HTTP_AUTHORIZATION")
         if not auth_header:
+            logger.error("Access token is invalid!!")
             raise AuthenticationFailed
         prefix,token=auth_header.split()
-        print(token)
         if not prefix=='Bearer': #front set
+            logger.error("Prefix is not equal Bearer!!")
             raise AuthenticationFailed
         user_id=JwtHelper.validate_jwt_token(token,SECRET_KEY)
         if not user_id:
+            logger.error("User id is not found!!")
             raise AuthenticationFailed
         user=User.objects.get(id=user_id)
         return user,token
