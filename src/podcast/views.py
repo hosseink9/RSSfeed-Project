@@ -112,6 +112,10 @@ class CommentView(APIView):
             if podcast:
                 comment = Comment(content_object = podcast, account = request.user, text = comment_serializer.validated_data.get("text"))
                 comment.save()
+                logger.info("Comment on podcast is registered")
+            else:
+                logger.error("Podcast is invalid!!")
+                return Response({'message':'Podcast is invalid!'},status=status.HTTP_400_BAD_REQUEST)
         elif comment_serializer.validated_data.get('model') == "episode":
             episode = Episode.objects.get(id = comment_serializer.validated_data.get("model_id"))
             if episode:
