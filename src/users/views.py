@@ -20,11 +20,14 @@ logger = logging.getLogger('django_API')
 class RegisterView(APIView):
     def post(self, request):
         user_serializer = UserSerializer(data=request.data)
-        user_serializer.is_valid(raise_exception=True)
+        if not user_serializer.is_valid():
+            logger.error("Serializer is Invalid!!")
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         user_serializer.save()
         request_META = request.META.get('HTTP_USER_AGENT')
         username = request.data.get('username')
         Publish().register(username=username, request_META=request_META)
+        logger.info(f"User with this {user_serializer.phone} is created!!")
         return Response(user_serializer.data, status=status.HTTP_201_CREATED)
 
 
