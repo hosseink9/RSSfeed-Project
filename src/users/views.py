@@ -104,7 +104,6 @@ class LoginRequiredView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request):
-        print(request.user.id)
         return Response({'message':"success","phone":request.user.phone})
 
 
@@ -126,6 +125,9 @@ class ChangePasswordView(APIView):
     def patch(self,request,pk):
         user = User.objects.get(pk=pk)
         serializer = self.serializer_class(data=request.data,instance=user,context={'request':request})
-        serializer.is_valid(raise_exception=True)
+        if not serializer.is_valid():
+            logger.error("ChangePassword Serializer is Invalid!!")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         serializer.update()
-        return Response({'message':'OK'})
+        logger.info("Change password is success!")
+        return Response({'message':'Change password is success!'})
