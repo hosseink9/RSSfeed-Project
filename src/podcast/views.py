@@ -121,6 +121,13 @@ class CommentView(APIView):
             if episode:
                 comment = Comment(content_object = episode, account = request.user, text = comment_serializer.validated_data.get("text"))
                 comment.save()
+                logger.info("Comment on episode is registered")
+            else:
+                logger.error("Episode is invalid!!")
+                return Response({'message':'Episode is invalid!'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            logger.error('Your model is invalid!')
+            return Response({'message':'Your model is invalid!'},status=status.HTTP_400_BAD_REQUEST)
         return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
 
 
