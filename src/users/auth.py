@@ -15,17 +15,21 @@ class UserAuthBackend(BaseBackend):
     def authenticate(self, request, phone=None, password=None, **kwargs):
         try:
             user = User.objects.get(phone=phone)
+            logger.error("User does not exist!!")
         except User.DoesNotExist:
             return None
 
         if user.check_password(password):
             return user
+        logger.error("Password is invalid!!")
+
 
 
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)
         except User.DoesNotExist:
+            logger.error("User does not exist!!")
             return None
 
 
