@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from podcast.models import Podcast
 from users.auth import JwtAuthentication
+import logging
 
 from episode.tasks import update_podcast
 from episode.models import Episode
@@ -13,6 +14,7 @@ from feedback.models import Like, Comment, Playlist
 
 from .tasks import save_podcast
 
+logger = logging.getLogger('django_API')
 
 class PodcastListView(APIView):
     def get(self, request):
