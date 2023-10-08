@@ -68,7 +68,10 @@ class LikeView(APIView):
     def post(self, request):
         print(request.user)
         like_serializer = LikeSerializer(data = request.data)
-        like_serializer.is_valid(raise_exception=True)
+        if not like_serializer.is_valid():
+            logger.error("Like Serializer is Invalid!!")
+            return Response(like_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         if like_serializer.validated_data.get('model') == "podcast":
             podcast = Podcast.objects.get(id = like_serializer.validated_data.get("model_id"))
             if podcast:
