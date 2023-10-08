@@ -53,7 +53,11 @@ class UpdatePodcastView(APIView):
 
     def post(self, request):
         data = request.data['xml']
+        if not data:
+            logger.error('xml file is invalid')
+            raise Response({'message':'xml is invalid!'}, status=status.HTTP_400_BAD_REQUEST)
         update_podcast.delay(data)
+        logger.info("Check podcast for updating")
         return Response({"message":"xml is going to update"}, status.HTTP_201_CREATED)
 
 
