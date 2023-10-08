@@ -114,6 +114,7 @@ class LogoutAPIView(APIView):
         response = Response()
         response.delete_cookie(key="AT")
         response.data = {"message": "success"}
+        logger.warning("Logout is success")
         return response
 
 class ChangePasswordView(APIView):
