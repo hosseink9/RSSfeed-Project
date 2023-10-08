@@ -140,7 +140,10 @@ class PlaylistView(APIView):
         DATA['account'] = request.user.id
         DATA.pop("playlist")
         playlist_serializer = PlaylistSerializer(data = DATA, partial = True ,instance=Playlist.objects.get(id=request.data.get("playlist")))
-        playlist_serializer.is_valid(raise_exception=True)
+        if not playlist_serializer.is_valid():
+            logger.error("Playlist Serializer is Invalid!!")
+            return Response(playlist_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         playlist_serializer.save()
+        logger.info("Item is add to playlist!")
         return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
 
