@@ -17,15 +17,11 @@ def update_all_podcast():
 
 @shared_task(bind=True, base=RetryTask)
 def update_podcast(self,url):
-    try:
-        data = requests.get(url).text
-        parser = Parser(data)
-        parser.update_exist_podcast()
+    data = requests.get(url).text
+    parser = Parser(data)
+    parser.update_exist_podcast()
 
-        if self.request.retries > self.retry_kwargs['max_retries']:
-            logger.error(f'{self.request.retries},{self.retry_kwargs["max_retries"]}')
-        elif self.request.retries == self.retry_kwargs['max_retries']:
-            logger.error("[Task isn't successfully]")
-
-    except Exception as e:
-        logger.error(e)
+    if self.request.retries > self.retry_kwargs['max_retries']:
+        logger.error(f'{self.request.retries},{self.retry_kwargs["max_retries"]}')
+    elif self.request.retries == self.retry_kwargs['max_retries']:
+        logger.error("Task isn't successfully")
