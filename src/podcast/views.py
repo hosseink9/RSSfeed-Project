@@ -86,6 +86,13 @@ class LikeView(APIView):
             if episode:
                 like = Like(content_object = episode, account = request.user)
                 like.save()
+                logger.info("Like on episode is registered")
+            else:
+                logger.error("Episode is invalid!!")
+                return Response({'message':'Episode is invalid!'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            logger.error('Your model is invalid!')
+            return Response({'message':'Your model is invalid!'},status=status.HTTP_400_BAD_REQUEST)
         return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
 
 
