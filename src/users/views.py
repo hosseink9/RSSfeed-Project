@@ -34,9 +34,12 @@ class RegisterView(APIView):
 class SendOTPView(APIView):
     def post(self, request):
         serializer=SerializerLogin(data=request.data, context={'request':request})
-        if serializer.is_valid(raise_exception=True):
+        if serializer.is_valid():
             serializer.create_otp(request, serializer.data['phone'])
-            return Response (data={'message':"200"})
+            logger.info('Serializer is valid!,OTP was sent')
+            return Response (data={'message':"OTP was sent"})
+        logger.error("Login serializer is Invalid!!")
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
 
 class VerifyOTP(APIView):
