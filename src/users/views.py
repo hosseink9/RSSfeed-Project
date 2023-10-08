@@ -5,6 +5,7 @@ from rest_framework import generics
 from rest_framework.views import Response
 from main.publisher import Publish
 
+import logging
 import jwt,datetime
 
 from .models import User
@@ -13,6 +14,7 @@ from .auth import JwtAuthentication
 from .utils import refresh_token_cache, validate_cache, JwtHelper
 from config import settings
 
+logger = logging.getLogger('django_API')
 
 
 class RegisterView(APIView):
