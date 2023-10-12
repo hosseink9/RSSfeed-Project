@@ -3,9 +3,6 @@ import requests
 from podcast.utils import Parser
 from podcast.tasks import RetryTask
 from podcast.models import Podcast
-import logging
-
-logger = logging.getLogger('django-celery')
 
 
 @shared_task
