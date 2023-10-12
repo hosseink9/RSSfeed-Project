@@ -1,11 +1,9 @@
 from celery import shared_task, Task
-import logging
 import requests
 
 from .utils import Parser
-from .models import Podcast, PodcastUrl
-
-logger = logging.getLogger('django-celery')
+from .models import PodcastUrl
+from .task_log import log_task_info
 
 
 class RetryTask(Task):
