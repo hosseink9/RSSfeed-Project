@@ -90,11 +90,11 @@ class NotificationInfo(BaseModel):
         message = models.TextField()
 
         def __str__(self):
-            return self.notification
+            return f'{self.message}'
 
 class Notification(BaseModel):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     message = models.ForeignKey(NotificationInfo, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.user}'
+        return f'{self.user} || {self.message} || {self.created_at}'
