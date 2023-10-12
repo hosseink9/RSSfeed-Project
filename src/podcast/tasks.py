@@ -15,6 +15,14 @@ class RetryTask(Task):
     worker_concurrency = 4
     prefetch_multiplier = 1
 
+    def retry(self, args=None, kwargs=None, exc=None, throw=True,
+              eta=None, countdown=None, max_retries=None, **options):
+        retry_count = self.request.retries
+        retry_eta = eta or (countdown and f'countdown={countdown}') or 'default'
+        log_task_info(self.name, 'warning', f'Retrying task {self.name} (retry {retry_count}) in {retry_eta} seconds',self.request.id, args, kwargs, exception=exc, retry_count=retry_count, max_retries=max_retries, retry_eta=retry_eta)
+
+        super().retry(args, kwargs, exc, throw, eta, countdown, max_retries, **options)
+
 
 
 
