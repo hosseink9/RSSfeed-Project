@@ -9,6 +9,7 @@ django.setup()
 
 from users.models import User, Notification, NotificationInfo
 from feedback.models import Playlist
+from config import settings
 
 
 
@@ -19,7 +20,7 @@ def login_callback(chanel, method, properties, body):
     Notification.objects.create(user = user, message = notification_info)
 
 def login_consume():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
     chanel = connection.channel()
 
     chanel.queue_declare(queue='login')
@@ -35,7 +36,7 @@ def register_callback(chanel, method, properties, body):
     Notification.objects.create(user = user, message = notification_info)
 
 def register_consume():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
     chanel = connection.channel()
 
     chanel.queue_declare(queue='register')
@@ -55,7 +56,7 @@ def update_podcast_callback(chanel, method, properties, body):
         Notification.objects.create(user = user, message = notification)
 
 def update_podcast_consume():
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
     chanel = connection.channel()
 
     chanel.queue_declare(queue='update_podcast')
