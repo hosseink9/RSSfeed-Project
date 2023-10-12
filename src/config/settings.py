@@ -197,15 +197,23 @@ LOGGING = {
 CACHES = {
     'default':{
         'BACKEND':'django_redis.cache.RedisCache',
-        'LOCATION':'redis://redis:6379',
+        'LOCATION':f'redis://{REDIS_HOST}:{REDIS_PORT}',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient'
         }
     }
 }
 
+ELASTICSEARCH_HOST = os.environ.get('ELASTICSEARCH_HOST')
+ELASTICSEARCH_PORT = os.environ.get('ELASTICSEARCH_PORT')
+
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'elasticsearch:9200'
+        'hosts': f'{ELASTICSEARCH_HOST}:{ELASTICSEARCH_PORT}'
     },
 }
+
+ELASTICSEARCH_API_LOG_INDEX = os.environ.get('ELASTICSEARCH_API_LOG_INDEX')
+ELASTICSEARCH_CELERY_LOG_INDEX = os.environ.get('ELASTICSEARCH_CELERY_LOG_INDEX')
+
+RABBITMQ_HOST = os.environ.get('RABBITMQ_HOST')
