@@ -5,6 +5,8 @@ from uuid import uuid4
 from rest_framework.views import Response
 from datetime import timedelta, datetime
 
+from config import settings
+
 
 def generate_jti():
     return str(uuid4().hex)
