@@ -26,6 +26,8 @@ class RetryTask(Task):
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         log_task_info(self.name, 'error', f'Task {self.name} failed: {str(exc)}',task_id, args, kwargs, exception=exc)
 
+    def on_success(self, retval, task_id, args, kwargs):
+        log_task_info(self.name, 'info', f'Task {self.name} completed successfully', task_id, args, kwargs, retval)
 
 
 
