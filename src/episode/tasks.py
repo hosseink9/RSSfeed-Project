@@ -7,9 +7,10 @@ from podcast.models import Podcast
 
 @shared_task
 def update_all_podcast():
-    url_list = Podcast.objects.all().values_list('podcast_url')
-    for url in url_list:
-        update_podcast.delay(url)
+    podcast = Podcast.objects.all()
+    for podcast_urls in podcast:
+        update_podcast.delay(url=str(podcast_urls.podcast_url.url))
+    return "Url sent to parsing!"
 
 
 @shared_task(bind=True, base=RetryTask)
