@@ -174,27 +174,21 @@ CELERY_BEAT_SCHEDULE = {
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'celery': {
-            'level': 'INFO',
-            'class': 'logging.FileHandler',
-            'filename': './log/celery_log.log',
-            'formatter':'verbose',
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "handlers": {
+        "elastic_handlers": {
+            "level": "INFO",
+            "class": "main.logger_handler.ElasticHandler",
         },
     },
-    "formatters":{
-        'verbose':{
-            'format': "{levelname} {asctime} {module} {thread:d} || {message}",
-            'style': '{',
-        },
-    },
-    'loggers': {
-        'django-celery': {
-            'handlers': ['celery'],
-            'level': 'INFO',
-            'propagate': True,
+
+    "loggers": {
+        "elastic-logger": {
+            "handlers": ["elastic_handlers"],
+            "level": "INFO",
+            'propagate': True
         },
     },
 }
