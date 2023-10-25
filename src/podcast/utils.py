@@ -189,14 +189,14 @@ class Parser:
             return "This podcast didn't save in database"
 
         episode_update_list = []
-        if podcast_object_last_update < podcast_last_update:
+        if podcast_object_last_update < podcast_last_update or len(episodes)>len(episode_objects_list):
             for new_episode in episodes:
                 if new_episode.get("guid") not in episode_objects_list:
                     episode_update_list.append(new_episode)
             author_list = self.get_author_objects(episode_update_list)
 
             self.save_episode_in_db(episode_update_list, author_list, podcast_object)
-            Publish.update_podcast(self,podcast_object)
-            return "Updated successfully"
+            Publish().update_podcast(podcast=podcast_object)
+            return "Updated successfully" + podcast_object.title
 
-        return "xml file has not new episode for update!!"
+        return "xml file has not new episode for update!!" + podcast_object.title
