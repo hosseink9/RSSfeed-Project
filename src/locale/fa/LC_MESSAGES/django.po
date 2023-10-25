@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-10-23 23:08+0330\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: config/settings.py:236
+msgid "English"
+msgstr ""
+
+#: config/settings.py:237
+msgid "Persian"
+msgstr ""
+
+#: podcast/views.py:23
+msgid "All podcasts"
+msgstr "همه پادکست ها "
+
+#: podcast/views.py:35
+msgid "URL is saved"
+msgstr "آدرس صفحه وب ذخیره شد"
+
+#: podcast/views.py:44
+msgid "URL is invalid!"
+msgstr "آدرس صفحه وب نادرست است"
+
+#: podcast/views.py:46
+msgid "Rss file save in database successfully."
+msgstr "فایل ار اس اس در پایگاه داده با موفقیت ذخیره شد"
+
+#: podcast/views.py:57
+#, fuzzy
+#| msgid "xml is going to update"
+msgid "All urls are going to update"
+msgstr "ایکس ام ال برای اپدیت انتقال داده شد"
+
+#: podcast/views.py:60
+msgid "xml is going to update"
+msgstr "ایکس ام ال برای اپدیت انتقال داده شد"
+
+#: podcast/views.py:81 podcast/views.py:102 podcast/views.py:116
+#: users/views.py:95 users/views.py:103
+msgid "success"
+msgstr "موفقیت امیز"
+
+#: users/views.py:29
+msgid "User is created successfully"
+msgstr "کاربر با موفقیت ساخته شد"
+
+#: users/views.py:37
+msgid "OTP was sent"
+msgstr "کد یک بار مصرف قرستاده شد"
+
+#: users/views.py:55
+msgid "login is success"
+msgstr "کاربر موفقیت امیز وارد شد"
+
+#: users/views.py:70
+msgid "invalid refresh token"
+msgstr "رفرش توکن اشتباه است"
+
+#: users/views.py:117
+msgid "Change password is success!"
+msgstr "تعویض رمزعبور با موفقیت انجام شد"
+
+#~ msgid "xml is invalid!"
+#~ msgstr "ایکس ام ال نادرست است"
+
+#~ msgid "message"
+#~ msgstr "پیغام"
