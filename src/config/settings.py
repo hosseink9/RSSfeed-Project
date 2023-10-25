@@ -171,13 +171,16 @@ REDIS_PORT = os.environ.get("REDIS_PORT")
 CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', f'redis://{REDIS_HOST}:{REDIS_PORT}') #'redis://redis:6379'
 CELERY_RESULT_BACKEND = os.environ.get('CELERY_RESULT_BACKEND', f'redis://{REDIS_HOST}:{REDIS_PORT}')
 
-CELERY_BEAT_SCHEDULE = {
-    "sample_task": {
-        "task": "episode.tasks.update_all_podcast",
-        "schedule": crontab(minute="*/1"),
-    },
-}
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
+# CELERY_BEAT_SCHEDULE = {
+#     "sample_task": {
+#         "task": "episode.tasks.update_all_podcast",
+#         "schedule": crontab(minute='*/1'),
+#     },
+# }
+
+# CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 LOGGING = {
     "version": 1,
