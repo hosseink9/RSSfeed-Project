@@ -4,9 +4,9 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from podcast.models import Podcast
 from users.auth import JwtAuthentication
-# import logging
+from django.utils.translation import gettext as _
 
-from episode.tasks import update_podcast
+from episode.tasks import update_podcast, update_all_podcast
 from episode.models import Episode
 from .serializer import PodcastSerializer, PodcastUrlSerializer
 from feedback.serializer import LikeSerializer, CommentSerializer, PlaylistSerializer
@@ -14,13 +14,14 @@ from feedback.models import Like, Comment, Playlist
 
 from .tasks import save_podcast
 
-# logger = logging.getLogger('django_API')
 
 class PodcastListView(APIView):
     def get(self, request):
         query = Podcast.objects.all()
-        ser_data = PodcastSerializer(instance=query, many=True)
-        return Response(ser_data.data, status=status.HTTP_200_OK)
+        serializer_data = PodcastSerializer(instance=query, many=True)
+        # print(serializer_data.get('title'))
+        message = _("All podcasts")
+        return Response((serializer_data.data,message), status=status.HTTP_200_OK)
 
 
 class AddPodcastUrlView(APIView):
@@ -30,10 +31,8 @@ class AddPodcastUrlView(APIView):
     def post(self,request):
         serializer = PodcastUrlSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        # logger.error("Podcast Serializer is Invalid!!")
         serializer.save()
-        # logger.info('Give podcast URL')
-        return Response({'message': "URL is saved"}, status=status.HTTP_201_CREATED)
+        return Response( _("URL is saved"), status=status.HTTP_201_CREATED)
 
 class AddPodcastView(APIView):
     authentication_classes = [JwtAuthentication]
@@ -42,21 +41,23 @@ class AddPodcastView(APIView):
     def post(self, request):
         data = request.data['url']
         if not data:
-            raise Response({'message':'URL is invalid!'}, status=status.HTTP_400_BAD_REQUEST)
+            raise Response(_('URL is invalid!'), status=status.HTTP_400_BAD_REQUEST)
         save_podcast.delay(data)
-        return Response({"message":"Rss file save in database successfully."}, status.HTTP_201_CREATED)
+        return Response({"message":_("Rss file save in database successfully.")}, status.HTTP_201_CREATED)
 
 
 class UpdatePodcastView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes = [IsAdminUser]
 
-    def post(self, request):
-        data = request.data['xml']
-        if not data:
-            raise Response({'message':'xml is invalid!'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request=None):
+        data = request.data.get('xml')
+        if data == None:
+            update_all_podcast.delay()
+            return Response({"message":_("All urls are going to update")}, status.HTTP_201_CREATED)
+            # raise Response(_('xml is invalid!'), status=status.HTTP_400_BAD_REQUEST)
         update_podcast.delay(data)
-        return Response({"message":"xml is going to update"}, status.HTTP_201_CREATED)
+        return Response({"message":_("xml is going to update")}, status.HTTP_201_CREATED)
 
 
 class LikeView(APIView):
@@ -77,7 +78,7 @@ class LikeView(APIView):
             if episode:
                 like = Like(content_object = episode, account = request.user)
                 like.save()
-        return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":_("success")}, status=status.HTTP_201_CREATED)
 
 
 class CommentView(APIView):
@@ -98,7 +99,7 @@ class CommentView(APIView):
             if episode:
                 comment = Comment(content_object = episode, account = request.user, text = comment_serializer.validated_data.get("text"))
                 comment.save()
-        return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":_("success")}, status=status.HTTP_201_CREATED)
 
 
 class PlaylistView(APIView):
@@ -112,5 +113,5 @@ class PlaylistView(APIView):
         playlist_serializer = PlaylistSerializer(data = DATA, partial = True ,instance=Playlist.objects.get(id=request.data.get("playlist")))
         playlist_serializer.is_valid(raise_exception=True)
         playlist_serializer.save()
-        return Response(data={"message":"success"}, status=status.HTTP_201_CREATED)
+        return Response(data={"message":_("success")}, status=status.HTTP_201_CREATED)
 
