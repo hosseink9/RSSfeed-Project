@@ -123,3 +123,15 @@ class PlaylistView(APIView):
 
 
 
+class RecommendationView(APIView):
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request):
+        categories = Playlist.objects.filter(account=request.user).values_list("podcasts__category__name")
+        categories = list(map(lambda item:item[0], categories))
+        recommended_podcast = Podcast.objects.filter(category__name__in=categories)[:10]
+        serializer = PodcastSerializer(instance=recommended_podcast, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
