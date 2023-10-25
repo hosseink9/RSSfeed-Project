@@ -10,7 +10,7 @@ django.setup()
 from users.models import User, Notification, NotificationInfo
 from feedback.models import Playlist
 from config import settings
-
+from podcast.models import Podcast
 
 
 def login_callback(chanel, method, properties, body):
@@ -46,20 +46,20 @@ def register_consume():
 
 
 def update_podcast_callback(chanel, method, properties, body):
-    data = body
+    data = json.loads(body)
 
-    playlist = Playlist.objects.get(podcasts = data['podcast'])
-
-    for detail in playlist:
-        notification = NotificationInfo.objects.create(message = data['message'])
-        user = User.objects.get(id = detail.user.id)
-        Notification.objects.create(user = user, message = notification)
+    playlists = Podcast.objects.get(id=data['podcast']).playlist_set.all()
+    for playlist in playlists:
+                notification = NotificationInfo.objects.create(message = data['message'])
+                user = User.objects.get(id=playlist.account.id)
+                Notification.objects.create(user = user, message = notification)
 
 def update_podcast_consume():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
     chanel = connection.channel()
 
     chanel.queue_declare(queue='update_podcast')
-    chanel.basic_consume(queue='update_podcast', on_message_callback=login_callback)
+
+    chanel.basic_consume(queue='update_podcast', on_message_callback=update_podcast_callback)
 
     chanel.start_consuming()
