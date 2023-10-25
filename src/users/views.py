@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.views import Response
 from main.publisher import Publish
+from django.utils.translation import gettext as _
 
 # import logging
 import jwt,datetime
@@ -25,7 +26,7 @@ class RegisterView(APIView):
         request_META = request.META.get('HTTP_USER_AGENT')
         username = request.data.get('username')
         Publish().register(username=username, request_META=request_META)
-        return Response(user_serializer.data, status=status.HTTP_201_CREATED)
+        return Response(_('User is created successfully'), status=status.HTTP_201_CREATED)
 
 
 class SendOTPView(APIView):
@@ -33,7 +34,7 @@ class SendOTPView(APIView):
         serializer=SerializerLogin(data=request.data, context={'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.create_otp(request, serializer.data['phone'])
-        return Response({"message":"OTP was sent"},status=status.HTTP_201_CREATED)
+        return Response(_("OTP was sent"),status=status.HTTP_201_CREATED)
 
 
 class VerifyOTP(APIView):
@@ -46,10 +47,12 @@ class VerifyOTP(APIView):
         refresh_token=user.get_refresh_token()
         refresh_token_cache(refresh_token)
 
+        data = {"AT":access_token, "RT":refresh_token}
+
         request_META = request.META.get('HTTP_USER_AGENT')
         username = user.username
         Publish().login(username=username, request_META=request_META)
-        return Response(data={'message':"login is success", "AT":access_token, "RT":refresh_token})
+        return Response(data=(_("login is success"), data))
 
 
 class RefreshTokenView(APIView):
@@ -64,7 +67,7 @@ class RefreshTokenView(APIView):
 
 
         if not validate_cache(refresh_token):
-            return Response(data={"message": "invalid refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response(data= _("invalid refresh token"), status=status.HTTP_401_UNAUTHORIZED)
         user_id = payload.get('user_id')
 
         try:
@@ -89,7 +92,7 @@ class LoginRequiredView(APIView):
     permission_classes=[IsAuthenticated]
 
     def get(self, request):
-        return Response({'message':"success","phone":request.user.phone})
+        return Response({'message':_("success"),"phone":request.user.phone})
 
 
 class LogoutAPIView(APIView):
@@ -97,7 +100,7 @@ class LogoutAPIView(APIView):
     def post(self, request):
         response = Response()
         response.delete_cookie(key="AT")
-        response.data = {"message": "success"}
+        response.data =  _("success")
         return response
 
 class ChangePasswordView(APIView):
@@ -111,4 +114,4 @@ class ChangePasswordView(APIView):
         serializer = self.serializer_class(data=request.data,instance=user,context={'request':request})
         serializer.is_valid(raise_exception=True)
         serializer.update()
-        return Response({'message':'Change password is success!'})
+        return Response(_('Change password is success!'))
