@@ -20,7 +20,7 @@ class Owner(BaseModel):
 
 
 class Image(BaseModel):
-    url = models.CharField(max_length=150,null=True,blank=True)
+    url = models.CharField(max_length=400,null=True,blank=True)
 
     title = models.CharField(max_length=100,null=True,blank=True)
     link = models.URLField(null=True,blank=True)
