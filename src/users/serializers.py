@@ -24,12 +24,18 @@ class UserSerializer(serializers.ModelSerializer):
 class SerializerLogin(serializers.Serializer):
 
     phone = serializers.CharField(required=True, allow_null=False)
+    password = serializers.CharField(required=True,  allow_null=False)
 
     def validate(self, data):
         phone = data.get('phone')
+        password = data.get('password')
 
         if not User.objects.filter(phone=phone).exists():
             raise serializers.ValidationError
+
+        user = User.objects.get(phone=phone)
+        if not user.check_password(password):
+            raise serializers.ValidationError('Invalid Password')
 
         return data
 
