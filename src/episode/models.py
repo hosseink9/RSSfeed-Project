@@ -6,12 +6,12 @@ from author.models import EpisodeAuthor
 
 class Episode(models.Model):
     title = models.CharField(max_length=100) #We use title for itunes_title too.
-    guid = models.CharField(max_length=50)
+    guid = models.CharField(max_length=150)
     itunes_duration = models.CharField(max_length=50)
     itunes_episode_type = models.CharField(max_length=50)
     itunes_explicit = models.CharField(max_length=50,null=True,blank=True)
     description = models.TextField() #We use description for itunes summary and content_encoded too.
-    enclosure = models.CharField(null=True, blank=True,max_length=100)
+    enclosure = models.CharField(null=True, blank=True,max_length=300)
     link = models.URLField(null=True,blank=True)
     pubDate = models.DateTimeField(null=True,blank=True)
     itunes_keywords = models.TextField(null=True, blank=True)
