@@ -115,3 +115,11 @@ class PlaylistView(APIView):
         playlist_serializer.save()
         return Response(data={"message":_("success")}, status=status.HTTP_201_CREATED)
 
+    def get(self, request):
+        user = request.user
+        query = Playlist.objects.filter(account=user)
+        playlist_serializer = PlaylistSerializer(instance=query, many=True)
+        return Response(playlist_serializer.data, status=status.HTTP_200_OK)
+
+
+
