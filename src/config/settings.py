@@ -226,3 +226,17 @@ ELASTICSEARCH_API_LOG_INDEX = os.environ.get('ELASTICSEARCH_API_LOG_INDEX')
 ELASTICSEARCH_CELERY_LOG_INDEX = os.environ.get('ELASTICSEARCH_CELERY_LOG_INDEX')
 
 RABBITMQ_HOST = os.environ.get('RABBITMQ_HOST')
+
+
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGE_CODE = 'en'
+
+LANGUAGES =(
+    ('en',_('English')),
+    ('fa',_('Persian')),
+)
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
