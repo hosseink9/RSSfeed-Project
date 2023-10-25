@@ -17,6 +17,6 @@ def update_all_podcast():
 def update_podcast(self,url):
     data = requests.get(url).text
     parser = Parser(rss_file=data)
-    parser.update_exist_podcast()
+    result = parser.update_exist_podcast()
 
-    return 'Update podcast task is complete'
+    return 'Update podcast task is complete' + result
