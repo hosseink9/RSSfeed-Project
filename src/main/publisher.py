@@ -19,7 +19,7 @@ class Publish:
         self.response = None
         # self.corr_id = str(uuid.uuid4())
         self.chanel.basic_publish(exchange = '', routing_key = 'login',
-                                    properties = pika.BasicProperties(delivery_mode=2), body =json.dumps(notification)) # properties = pika.BasicProperties(reply_to = self.qname, correlation_id=self.corr_id)
+                                    properties = pika.BasicProperties(delivery_mode=2), body = json.dumps(notification)) # properties = pika.BasicProperties(reply_to = self.qname, correlation_id=self.corr_id)
 
     def register(self, username, request_META):
         notification={
@@ -32,10 +32,10 @@ class Publish:
 
     def update_podcast(self, podcast):
         notification={
-            'podcast' : podcast,
-            'message' : f"{podcast} has new episodes"
+            'podcast' : podcast.id,
+            'message' : f"{podcast.title} has new episodes"
         }
         self.response = None
         self.chanel.basic_publish(exchange = '', routing_key = 'update_podcast',
-                                    properties = pika.BasicProperties(delivery_mode=2), body =notification)
+                                    properties = pika.BasicProperties(delivery_mode=2), body = json.dumps(notification))
 
