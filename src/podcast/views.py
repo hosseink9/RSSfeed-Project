@@ -112,6 +112,12 @@ class PlaylistView(APIView):
         playlist_serializer = PlaylistSerializer(instance=query, many=True)
         return Response(playlist_serializer.data, status=status.HTTP_200_OK)
 
+    def post(self, request):
+        serializer=PlaylistSerializer(data=request.data, context={'request':request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
 
