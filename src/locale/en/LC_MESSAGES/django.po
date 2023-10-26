@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-23 23:08+0330\n"
+"POT-Creation-Date: 2023-10-25 19:54+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "xml is going to update"
 msgstr ""
 
-#: podcast/views.py:81 podcast/views.py:102 podcast/views.py:116
+#: podcast/views.py:81 podcast/views.py:102 podcast/views.py:132
 #: users/views.py:95 users/views.py:103
 msgid "success"
 msgstr ""
