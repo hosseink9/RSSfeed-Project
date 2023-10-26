@@ -118,6 +118,7 @@ class PlaylistView(APIView):
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+class AddToPlaylistView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
 
@@ -129,13 +130,6 @@ class PlaylistView(APIView):
         playlist_serializer.is_valid(raise_exception=True)
         playlist_serializer.save()
         return Response(data={"message":_("success")}, status=status.HTTP_201_CREATED)
-
-    def get(self, request):
-        user = request.user
-        query = Playlist.objects.filter(account=user)
-        playlist_serializer = PlaylistSerializer(instance=query, many=True)
-        return Response(playlist_serializer.data, status=status.HTTP_200_OK)
-
 
 
 class RecommendationView(APIView):
