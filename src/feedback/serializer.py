@@ -17,7 +17,9 @@ class CommentSerializer(serializers.Serializer):
 class PlaylistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Playlist
-        fields = ['title','description','account','podcasts','episodes']
+        fields = ['title','description','podcasts','episodes']
+        optional_fields = ['account']
+        unique_together = ['account', 'title']
 
 
 
