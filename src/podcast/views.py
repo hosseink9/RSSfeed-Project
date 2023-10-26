@@ -106,6 +106,12 @@ class PlaylistView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
 
+    def get(self, request):
+        user = request.user
+        query = Playlist.objects.filter(account=user)
+        playlist_serializer = PlaylistSerializer(instance=query, many=True)
+        return Response(playlist_serializer.data, status=status.HTTP_200_OK)
+
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
 
