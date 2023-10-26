@@ -197,6 +197,6 @@ class Parser:
 
             self.save_episode_in_db(episode_update_list, author_list, podcast_object)
             Publish().update_podcast(podcast=podcast_object)
-            return "Updated successfully" + podcast_object.title
+            return f"{podcast_object.title} Updated successfully"
 
         return "xml file has not new episode for update!!" + podcast_object.title
