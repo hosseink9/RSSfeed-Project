@@ -106,6 +106,9 @@ class PlaylistView(APIView):
     authentication_classes = [JwtAuthentication]
     permission_classes=[IsAuthenticated]
 
+    authentication_classes = [JwtAuthentication]
+    permission_classes=[IsAuthenticated]
+
     def post(self, request):
         DATA =  request.data.copy()
         DATA['account'] = request.user.id
