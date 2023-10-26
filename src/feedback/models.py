@@ -32,8 +32,8 @@ class Playlist(BaseModel):
     description = models.TextField(blank=False,null=True)
     account = models.ForeignKey(User,on_delete=models.CASCADE)
 
-    podcasts = models.ManyToManyField(Podcast)
-    episodes = models.ManyToManyField(Episode)
+    podcasts = models.ManyToManyField(Podcast, null=True, blank=True)
+    episodes = models.ManyToManyField(Episode, null=True, blank=True)
 
 
     def __str__(self) -> str:
