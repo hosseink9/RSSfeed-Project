@@ -2,6 +2,7 @@ import pika
 import json
 import time
 import os
+import logging
 
 import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -11,6 +12,9 @@ from users.models import User, Notification, NotificationInfo
 from feedback.models import Playlist
 from config import settings
 from podcast.models import Podcast
+from main.utils import authentication_log_format, rss_log_format
+
+logger = logging.getLogger('elastic-logger')
 
 
 def login_callback(chanel, method, properties, body):
