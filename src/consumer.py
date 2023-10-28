@@ -75,6 +75,11 @@ def update_podcast_callback(chanel, method, properties, body):
                     Notification.objects.create(user = user, message = notification)
         log_data = rss_log_format(data)
         logger.info(json.dumps(log_data))
+    except Exception as error:
+        log_data = rss_log_format(data, error)
+        logger.error(json.dumps(log_data))
+
+
 
 def update_podcast_consume():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
