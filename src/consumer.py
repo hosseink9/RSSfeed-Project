@@ -49,6 +49,11 @@ def register_callback(chanel, method, properties, body):
         Notification.objects.create(user = user, message = notification_info)
         log_data = authentication_log_format(user,data)
         logger.info(json.dumps(log_data))
+    except Exception as error:
+        log_data = authentication_log_format(user, data, error)
+        logger.error(json.dumps(log_data))
+
+
 
 def register_consume():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
