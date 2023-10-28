@@ -37,7 +37,8 @@ class Publish:
     def update_podcast(self, podcast):
         notification={
             'podcast' : podcast.id,
-            'message' : f"{podcast.title} has new episodes"
+            'message' : f"{podcast.title} has new episodes",
+            'routing_key': 'update_podcast'
         }
         self.response = None
         self.chanel.basic_publish(exchange = '', routing_key = 'update_podcast',
