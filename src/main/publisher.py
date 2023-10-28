@@ -14,7 +14,9 @@ class Publish:
     def login(self, username, request_META):
         notification={
             'username' : username,
-            'message' : f"{username} is login; {request_META}"
+            'message' : f"{username} is login",
+            'user_agent': request_META,
+            'routing_key': 'login'
         }
         self.response = None
         # self.corr_id = str(uuid.uuid4())
@@ -24,7 +26,9 @@ class Publish:
     def register(self, username, request_META):
         notification={
             'username' : username,
-            'message' : f"{username} is register; {request_META}"
+            'message' : f"{username} is register",
+            'user_agent': request_META,
+            'routing_key': 'register'
         }
         self.response = None
         # self.corr_id = str(uuid.uuid4())
