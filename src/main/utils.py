@@ -35,3 +35,20 @@ def log_format(request, response, exception=None):
         'user_agent': user_agent,
         'event': event,
     }
+
+
+
+def authentication_log_format(user,body, exception=None):
+
+    message = str(exception) if exception else 'Consume is successfully'
+
+
+    return {
+        'user_id': str(user.id ),
+        'user_phone': str(user.phone),
+        'user_agent': body["user_agent"],
+        'event': f"consumer.{body['routing_key']}",
+        "status": "success",
+        'message': message
+    }
+
