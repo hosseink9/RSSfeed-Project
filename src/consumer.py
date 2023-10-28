@@ -66,13 +66,15 @@ def register_consume():
 
 
 def update_podcast_callback(chanel, method, properties, body):
-    data = json.loads(body)
-
-    playlists = Podcast.objects.get(id=data['podcast']).playlist_set.all()
-    for playlist in playlists:
-                notification = NotificationInfo.objects.create(message = data['message'])
-                user = User.objects.get(id=playlist.account.id)
-                Notification.objects.create(user = user, message = notification)
+    try:
+        data = json.loads(body)
+        playlists = Podcast.objects.get(id=data['podcast']).playlist_set.all()
+        for playlist in playlists:
+                    notification = NotificationInfo.objects.create(message = data['message'])
+                    user = User.objects.get(id=playlist.account.id)
+                    Notification.objects.create(user = user, message = notification)
+        log_data = rss_log_format(data)
+        logger.info(json.dumps(log_data))
 
 def update_podcast_consume():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
