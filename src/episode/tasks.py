@@ -19,4 +19,4 @@ def update_podcast(self,url):
     parser = Parser(rss_file=data)
     result = parser.update_exist_podcast()
 
-    return 'Update podcast task is complete' + result
+    return f"Update podcast task is complete | {result}"
