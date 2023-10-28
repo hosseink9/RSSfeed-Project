@@ -18,10 +18,14 @@ logger = logging.getLogger('elastic-logger')
 
 
 def login_callback(chanel, method, properties, body):
-    data = json.loads(body)
-    user = User.objects.get(username=data['username'])
-    notification_info = NotificationInfo.objects.create(message=data['message'])
-    Notification.objects.create(user = user, message = notification_info)
+    try:
+        data = json.loads(body)
+        user = User.objects.get(username=data['username'])
+        notification_info = NotificationInfo.objects.create(message=data['message'])
+        Notification.objects.create(user = user, message = notification_info)
+        log_data = authentication_log_format(user,data)
+        logger.info(json.dumps(log_data))
+
 
 def login_consume():
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=settings.RABBITMQ_HOST))
