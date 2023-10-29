@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import PodcastListView, AddPodcastView, LikeView, CommentView, AddToPlaylistView, UpdatePodcastView, AddPodcastUrlView,RecommendationView, PlaylistView
+from .views import PodcastListView, AddPodcastView, LikeView, CommentView, AddToPlaylistView, UpdatePodcastView, AddPodcastUrlView,RecommendationView, PlaylistView, PodcastView
 
 app_name = 'podcast'
 
 urlpatterns = [
     path("podcasts/", PodcastListView.as_view(), name="podcasts"),
+    path("podcast_view/<id>", PodcastView.as_view(), name="podcast_view"),
     path("add_podcast_url/", AddPodcastUrlView.as_view(), name="podcasts"),
     path("add_podcast/", AddPodcastView.as_view(),name='add_podcast'),
     path("like/", LikeView.as_view(),name='like'),
