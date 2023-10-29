@@ -23,6 +23,12 @@ class PodcastListView(APIView):
         message = _("All podcasts")
         return Response((serializer_data.data,message), status=status.HTTP_200_OK)
 
+class PodcastView(APIView):
+    def get(self,request, id):
+        query = Podcast.objects.filter(id=id)
+        serializer_data = PodcastSerializer(instance=query, many=True)
+        return Response(serializer_data.data, status=status.HTTP_200_OK)
+
 
 class AddPodcastUrlView(APIView):
     authentication_classes = [JwtAuthentication]
