@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-25 19:54+0330\n"
+"POT-Creation-Date: 2023-10-29 22:28+0330\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,29 +30,29 @@ msgstr ""
 msgid "All podcasts"
 msgstr "همه پادکست ها "
 
-#: podcast/views.py:35
+#: podcast/views.py:41
 msgid "URL is saved"
 msgstr "آدرس صفحه وب ذخیره شد"
 
-#: podcast/views.py:44
+#: podcast/views.py:50
 msgid "URL is invalid!"
 msgstr "آدرس صفحه وب نادرست است"
 
-#: podcast/views.py:46
+#: podcast/views.py:52
 msgid "Rss file save in database successfully."
 msgstr "فایل ار اس اس در پایگاه داده با موفقیت ذخیره شد"
 
-#: podcast/views.py:57
+#: podcast/views.py:63
 #, fuzzy
 #| msgid "xml is going to update"
 msgid "All urls are going to update"
 msgstr "ایکس ام ال برای اپدیت انتقال داده شد"
 
-#: podcast/views.py:60
+#: podcast/views.py:66
 msgid "xml is going to update"
 msgstr "ایکس ام ال برای اپدیت انتقال داده شد"
 
-#: podcast/views.py:81 podcast/views.py:102 podcast/views.py:132
+#: podcast/views.py:87 podcast/views.py:108 podcast/views.py:138
 #: users/views.py:95 users/views.py:103
 msgid "success"
 msgstr "موفقیت امیز"
